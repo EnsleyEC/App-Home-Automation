@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-nat
 import axios from 'axios';
 
 export default class ScreenTwo extends Component {
-    static navigationOptions = { title: 'Welcome', header: null };
+    static navigationOptions = { title: 'Atualizar dispositivo', header: null };
 
     constructor(props) {
         super(props);
@@ -51,9 +51,9 @@ export default class ScreenTwo extends Component {
 
                         <TouchableHighlight
                             style={styles.btn}
-                            onPress={() => this._back()}
+                            onPress={() => this.props.navigation.goBack()}
                         >
-                            <Text style={styles.txtBtn}>Cancelar</Text>
+                            <Text style={styles.txtBtn}>Voltar</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

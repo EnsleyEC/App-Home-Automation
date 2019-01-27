@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-nat
 import axios from 'axios';
 
 export default class ScreenThree extends Component {
-    static navigationOptions = { title: 'Welcome', header: null };
+    static navigationOptions = { title: 'Criar Ambiente', header: null };
 
     constructor(props) {
         super(props);
@@ -16,14 +16,10 @@ export default class ScreenThree extends Component {
         this.props.navigation.navigate('ScreenOne', {nameAmb});
     }
 
-    _back = () => {
-        this.props.navigation.navigate('ScreenOne');
-    };
-
     render() {
         const { navigation } = this.props;
         const ip = navigation.getParam('ip', '');
-
+        const { goBack } = this.props.navigation;
         return (
             <View style={styles.container}>
 
@@ -46,9 +42,9 @@ export default class ScreenThree extends Component {
 
                         <TouchableHighlight
                             style={styles.btn}
-                            onPress={() => this._back()}
+                            onPress={() => this.props.navigation.goBack()}
                         >
-                            <Text style={styles.txtBtn}>Cancelar</Text>
+                            <Text style={styles.txtBtn}>Voltar</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

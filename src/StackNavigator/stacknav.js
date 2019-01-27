@@ -24,7 +24,8 @@ const CustomDrawerComponent = (props) => (
 
 const App = createDrawerNavigator({
     Home: ScreenOne,
-    SecondScreen: ScreenTwo},
+    SecondScreen: ScreenTwo,
+    ThirdScreen: ScreenThree},
     {
     contentComponent: CustomDrawerComponent 
     }

@@ -9,6 +9,7 @@ import App from './src/StackNavigator/stacknav'
 export default class app1 extends Component  { 
 
     render() {
+      console.disableYellowBox= true;
       return (
         <App />
         );

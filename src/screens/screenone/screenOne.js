@@ -5,12 +5,11 @@ import {
   StyleSheet,
   DrawerLayoutAndroid,
   TouchableOpacity,
-  Container,
   Image
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
-import { Header, Left, Right, Icon } from 'native-base'
+import { Header, Left, Right, Icon, Container } from 'native-base'
 import {
   toByteArray,
   multicastIP,
@@ -41,7 +40,7 @@ export default class ScreenOne extends Component {
   openDrawer = () => {
     this.drawer._root.open()
   };
-  static navigationOptions = { title: 'Welcome', header: null };
+  static navigationOptions = { title: 'Home', header: null };
 
   componentWillMount() {
     this.startMulticast()
@@ -53,7 +52,7 @@ export default class ScreenOne extends Component {
   }
 
   changeName = (ip) => {
-    this.props.navigation.navigate('ScreenTwo', { ip });
+    this.props.navigation.navigate('ScreenThree', { ip });
   }
 
   addVar = () => {
@@ -114,19 +113,26 @@ export default class ScreenOne extends Component {
     }
     return unique_array
   }
-  //style={styles.container}
+
   render() {
+    const { navigation } = this.props;
+    const y = navigation.getParam('nameAmb');
+    console.log("Y", y)
+    if (y != undefined) {
+      this.state.amb.push(y);
+      this.state.amb = this.removeDuplicates(this.state.amb);
+    }
     return (
       <View style={styles.mainContainer}>
-        <Header>
-          <Left>
-            <Icon name="menu" onPress={() => this.props.navigation.openDrawer()} />
-          </Left>
-        </Header>
+        <Container style={{backgroundColor: 'blue', flexDirection: 'row',alignItems: 'center',
+        
 
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-          <Icon name="home" size={80} color="#5585ff" />
-
+}}>
+          <Icon style={{ marginLeft: 10}} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+        </Container>
+        <View style={styles.img}>
+          <Image style={{ width: 85, height: 30 }}
+            source={require('../../img/lumenx2.png')} />
         </View>
         <TouchableOpacity style={styles.btn}
           onPress={() => this.startMulticast()}>
@@ -139,39 +145,10 @@ export default class ScreenOne extends Component {
             _changeName={this.changeName.bind(this)}
             dataArrayAmb={this.state.amb} />
         </View>
-
-        <View style={styles.img}>
-          <Image style={{ width: 80, height: 33 }}
-            source={require('../../img/lumenx2.png')} />
-        </View>
       </View>
 
 
     );
-
-    /* <View style={styles.mainContainer}>
-
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-        <Icon name="home" size={80} color="#5585ff" />
-
-      </View>
-      <TouchableOpacity style={styles.btn}
-        onPress={() => this.startMulticast()}>
-        <Text style={styles.txtScan}>Escanear Dispositivos</Text>
-      </TouchableOpacity>
-
-      <View style={{ flex: 6 }}>
-        <MenuAmb metaData={this.state.deviceDataList}
-          // _startMulticast={this.startMulticast.bind(this)} //TIRAR ESSA LINHA
-          _changeName={this.changeName.bind(this)}
-          dataArrayAmb={this.state.amb} />
-      </View>
-
-      <View style={styles.img}>
-        <Image style={{ width: 80, height: 33 }}
-          source={require('../../img/lumenx2.png')} />
-      </View>
-    </View> */
 
   }
 }

@@ -8,7 +8,7 @@ export default class SideBar extends Component {
 
     
   }
-  static navigationOptions = { title: 'Welcome', header: null };
+  static navigationOptions = { title: 'Home', header: null };
 
     render() {
       

@@ -18,7 +18,7 @@ import {
 } from '../lib/utilities';
 
 export default class ScannerBtn extends Component {
-    static navigationOptions = { title: 'Welcome', header: null };
+    static navigationOptions = { title: 'Home', header: null };
     constructor() {
         super();
         this.availableDevices = {};
