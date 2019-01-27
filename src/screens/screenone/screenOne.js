@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Button,
   Text,
   View,
   StyleSheet,
@@ -38,6 +39,7 @@ export default class ScreenOne extends Component {
   openDrawer = () => {
     this.drawer._root.open()
   };
+
   static navigationOptions = { title: 'Home', header: null };
 
   componentWillMount() {

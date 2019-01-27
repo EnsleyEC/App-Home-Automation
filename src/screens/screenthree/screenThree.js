@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
-import axios from 'axios';
+import { Alert,StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 
 export default class ScreenThree extends Component {
     static navigationOptions = { title: 'Criar Ambiente', header: null };
@@ -9,11 +8,28 @@ export default class ScreenThree extends Component {
         super(props);
         this.state = { newname: '', amb: ["Default"] };
     }
-
+    _backScreen()
+    {
+        Alert.alert(
+            'Informação',
+            'Ambiente criado com sucesso!',
+            [
+              {
+                text: 'Ok',
+                onPress: () => this.props.navigation.goBack(),
+              },
+            ],
+            { cancelable: false }
+        );
+    }
+    
     _onPress(nameAmb) {
-            // PRECISA GRAVAR NO SQLITE
+        // PRECISA GRAVAR NO SQLITE
+        // Mostrando a mensagem
+      
         // const x = this.state.amb.push(nameAmb);
-        this.props.navigation.navigate('ScreenOne', {nameAmb});
+        this._backScreen()
+        //this.props.navigation.navigate('ScreenOne', { nameAmb });
     }
 
     render() {
@@ -24,7 +40,7 @@ export default class ScreenThree extends Component {
             <View style={styles.container}>
 
                 <View style={styles.containerBody}>
-                    <Text style={styles.txtTittle}>Adicionar Ambiente</Text>
+                    <Text style={styles.txtTittle}>Criar Ambiente</Text>
                     <TextInput
                         placeholder="Digite o nome do ambiente.."
                         style={styles.txtInput}
@@ -37,7 +53,8 @@ export default class ScreenThree extends Component {
                         <TouchableHighlight
                             style={styles.btn}
                             onPress={() => this._onPress(this.state.nameAmb)}>
-                            <Text style={styles.txtBtn}>Alterar</Text>
+                            <Text style={styles.txtBtn}>Criar</Text>
+                            
                         </TouchableHighlight>
 
                         <TouchableHighlight

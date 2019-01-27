@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 import axios from 'axios';
 
 export default class ScreenTwo extends Component {
@@ -9,16 +9,48 @@ export default class ScreenTwo extends Component {
         super(props);
         this.state = { newname: '' };
     }
+    _backScreen(nameChanged) {
+        if (nameChanged) {
+            Alert.alert(
+                'Informação',
+                'Nome do ambiente atualizado com sucesso!',
+                [
+                    {
+                        text: 'Ok',
+                        onPress: () => this.props.navigation.goBack(),
+                    },
+                ],
+                { cancelable: false }
+            );
+        }
+        else {
+            Alert.alert(
+                'Erro',
+                'Nome do ambiente não foi atualizado, tente novamente!',
+                [
+                    {
+                        text: 'Ok',
+                    },
+                ],
+                { cancelable: false }
+            );
+        }
+    }
+    _changeName(name, ip) {
 
-    _onPress(name, ip) {
 
         axios.get(`http://${ip}/deviceName?name=${name}`)
             .then(response => {
                 this.setState({ newname: response.data });
-                this.props.navigation.navigate('ScreenOne', {name});
+                this._backScreen(true)
+                //this.props.navigation.navigate('ScreenOne', { name });
             })
-            .catch(() => { console.log('Error'); }
+            .catch(() => {
+                console.log('Error');
+                this._backScreen(false)
+            }
             );
+
     }
 
     _back = () => {
@@ -45,7 +77,7 @@ export default class ScreenTwo extends Component {
 
                         <TouchableHighlight
                             style={styles.btn}
-                            onPress={() => this._onPress(this.state.name, ip)}>
+                            onPress={() => this._changeName(this.state.name, ip)}>
                             <Text style={styles.txtBtn}>Alterar</Text>
                         </TouchableHighlight>
 
