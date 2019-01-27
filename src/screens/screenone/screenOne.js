@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  DrawerLayoutAndroid,
   TouchableOpacity,
   Image
 } from 'react-native';
@@ -17,7 +16,6 @@ import {
 } from '../../lib/utilities';
 
 import MenuAmb from '../../components/menuamb'
-import SideBar from '../../sidebar/sideBar'
 
 export default class ScreenOne extends Component {
   constructor() {
@@ -124,11 +122,10 @@ export default class ScreenOne extends Component {
     }
     return (
       <View style={styles.mainContainer}>
-        <Container style={{backgroundColor: 'blue', flexDirection: 'row',alignItems: 'center',
-        
-
-}}>
-          <Icon style={{ marginLeft: 10}} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+        <Container style={{
+          backgroundColor: 'blue', flexDirection: 'row', alignItems: 'center'
+        }}>
+          <Icon style={{ marginLeft: 10 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
         </Container>
         <View style={styles.img}>
           <Image style={{ width: 85, height: 30 }}
