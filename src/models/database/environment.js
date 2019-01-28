@@ -76,7 +76,7 @@ export default class EnvironmentDAO extends Component {
                 for (let i = 0; i < results.rows.length; ++i) {
                     temp.push(results.rows.item(i));
                     // mostrando os ambientes na tela
-                    //alert(results.rows.item(i).name)
+                    alert(results.rows.item(i).name)
                 }
                 this.setState({
                     dataSource: ds.cloneWithRows(temp),
@@ -109,6 +109,35 @@ export default class EnvironmentDAO extends Component {
                         );
                     } else {
                         alert('Erro ao deletar o ambiente!');
+                    }
+                }
+            );
+        });
+
+    }
+
+    update_environment = (envi_new_name, envi_old_name, nav) => {
+
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'UPDATE environment set name = ? where name = ?',
+                [envi_new_name, envi_old_name],
+                (tx, results) => {
+                    console.log('Results', results.rowsAffected);
+                    if (results.rowsAffected > 0) {
+                        Alert.alert(
+                            'Informação',
+                            'Nome do ambiente atualizado com sucesso!',
+                            [
+                                {
+                                    text: 'Ok',
+                                    onPress: () => nav.navigation.goback(),
+                                },
+                            ],
+                            { cancelable: false }
+                        );
+                    } else {
+                        alert('Erro ao atualizar o ambiente!');
                     }
                 }
             );
