@@ -116,6 +116,13 @@ export default class ScreenOne extends Component {
   }
   //style={styles.container}
   render() {
+    const { navigation } = this.props;
+    const y = navigation.getParam('nameAmb');
+    console.log("Y", y)
+    if (y != undefined) {
+      this.state.amb.push(y);
+      this.state.amb = this.removeDuplicates(this.state.amb);
+    }
     return (
       <View style={styles.mainContainer}>
         <Header>
