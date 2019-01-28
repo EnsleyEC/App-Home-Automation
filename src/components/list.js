@@ -59,8 +59,8 @@ export default class List extends Component {
 
     render() {
         const dataArray = [
-            { title: "First Element", content: <Test /> },
-            { title: "Second Element", content: "Lorem ipsum dolor sit amet" }
+            { title: "Novos Dispositivos", content: <Test /> },
+            { title: "Ambiente-1", content: "Lorem ipsum dolor sit amet" }
         ];
         const list = this.props.metaData || [];
         const newList = this.removeDuplicates(list, "ipdevice");

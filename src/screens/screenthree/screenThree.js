@@ -1,34 +1,31 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
-import axios from 'axios';
+import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import EnvironmentDAO from '../../models/database/environment'
+var database = new EnvironmentDAO()
 
 export default class ScreenThree extends Component {
-    static navigationOptions = { title: 'Welcome', header: null };
+    static navigationOptions = { title: 'Criar Ambiente', header: null };
 
     constructor(props) {
         super(props);
         this.state = { newname: '', amb: ["Default"] };
     }
 
-    _onPress(nameAmb) {
-            // PRECISA GRAVAR NO SQLITE
-        // const x = this.state.amb.push(nameAmb);
-        this.props.navigation.navigate('ScreenOne', {nameAmb});
-    }
+    _saveEnvironment(nameAmb) {
+        // PRECISA GRAVAR NO SQLITE
+        database.register_environment(nameAmb, '111.111.111-11', this.props)
 
-    _back = () => {
-        this.props.navigation.navigate('ScreenOne');
-    };
+    }
 
     render() {
         const { navigation } = this.props;
         const ip = navigation.getParam('ip', '');
-
+        const { goBack } = this.props.navigation;
         return (
             <View style={styles.container}>
 
                 <View style={styles.containerBody}>
-                    <Text style={styles.txtTittle}>Adicionar Ambiente</Text>
+                    <Text style={styles.txtTittle}>Criar Ambiente</Text>
                     <TextInput
                         placeholder="Digite o nome do ambiente.."
                         style={styles.txtInput}
@@ -40,15 +37,16 @@ export default class ScreenThree extends Component {
 
                         <TouchableHighlight
                             style={styles.btn}
-                            onPress={() => this._onPress(this.state.nameAmb)}>
-                            <Text style={styles.txtBtn}>Alterar</Text>
+                            onPress={() => this._saveEnvironment(this.state.nameAmb)}>
+                            <Text style={styles.txtBtn}>Criar</Text>
+
                         </TouchableHighlight>
 
                         <TouchableHighlight
                             style={styles.btn}
-                            onPress={() => this._back()}
+                            onPress={() => this.props.navigation.goBack()}
                         >
-                            <Text style={styles.txtBtn}>Cancelar</Text>
+                            <Text style={styles.txtBtn}>Voltar</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

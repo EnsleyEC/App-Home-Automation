@@ -2,17 +2,19 @@
 import React, { Component } from 'react';
 
 
-import { AppRegistry } from 'react-native';
+import {  AppRegistry } from 'react-native';
 
-import App from './src/StackNavigator/stacknav'
+import App from './src/routes/routerScreen'
 
-export default class app1 extends Component  { 
+export default class app1 extends Component {
 
-    render() {
-      return (
-        <App />
-        );
-    }
+  render() {
+    console.disableYellowBox = true;
+    return (
+      <App />
+    );
   }
+}
 
 AppRegistry.registerComponent('smartlight', () => app1);
+

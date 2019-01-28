@@ -50,7 +50,7 @@ export default class MenuAmb extends Component {
   render() {
     const SECTIONS = [
       {
-        title: 'First Element',
+        title: 'Novos dispositivos',
         content: <DeviceList
           _metaData={this.props.metaData}
         // __startMulticast={this.props._startMulticast()}
@@ -59,7 +59,7 @@ export default class MenuAmb extends Component {
         />,
       },
       {
-        title: 'Second Element',
+        title: 'Ambiente-1',
         content: <Test />,
       }
     ];
