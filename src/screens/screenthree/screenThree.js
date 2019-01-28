@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Alert,StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import EnvironmentDAO from '../../models/database/environment'
+var database = new EnvironmentDAO()
 
 export default class ScreenThree extends Component {
     static navigationOptions = { title: 'Criar Ambiente', header: null };
@@ -8,28 +10,11 @@ export default class ScreenThree extends Component {
         super(props);
         this.state = { newname: '', amb: ["Default"] };
     }
-    _backScreen()
-    {
-        Alert.alert(
-            'Informação',
-            'Ambiente criado com sucesso!',
-            [
-              {
-                text: 'Ok',
-                onPress: () => this.props.navigation.goBack(),
-              },
-            ],
-            { cancelable: false }
-        );
-    }
-    
-    _onPress(nameAmb) {
+
+    _saveEnvironment(nameAmb) {
         // PRECISA GRAVAR NO SQLITE
-        // Mostrando a mensagem
-      
-        // const x = this.state.amb.push(nameAmb);
-        this._backScreen()
-        //this.props.navigation.navigate('ScreenOne', { nameAmb });
+        database.register_environment(nameAmb, '111.111.111-11', this.props)
+
     }
 
     render() {
@@ -52,9 +37,9 @@ export default class ScreenThree extends Component {
 
                         <TouchableHighlight
                             style={styles.btn}
-                            onPress={() => this._onPress(this.state.nameAmb)}>
+                            onPress={() => this._saveEnvironment(this.state.nameAmb)}>
                             <Text style={styles.txtBtn}>Criar</Text>
-                            
+
                         </TouchableHighlight>
 
                         <TouchableHighlight

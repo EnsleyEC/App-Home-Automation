@@ -18,9 +18,17 @@ import {
 
 import MenuAmb from '../../components/menuamb'
 
+// database
+import EnvironmentDAO from '../../models/database/environment'
+
 export default class ScreenOne extends Component {
   constructor() {
     super();
+
+    // verificando a criação do banco
+    var database = new EnvironmentDAO()
+    database.create_database()
+
     this.multicastClient = null;
     this.arrayip = [];
     this.amountIp = null;
