@@ -132,12 +132,19 @@ export default class ScreenOne extends Component {
     }
     return (
       <View style={styles.mainContainer}>
+<<<<<<< HEAD
         <Container style={styles.headerApp}>
           <Icon style={styles.menuDrawer} name="menu" onPress={() => this.props.navigation.openDrawer()} />
           <Text style={styles.titleApp}>Smart Light</Text>
+=======
+        <Container style={{
+          backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center'
+        }}>
+          <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+>>>>>>> bfc9811e46e74bf28becc8fd7f0fa934a4b31c97
         </Container>
         <View style={styles.img}>
-          <Image style={{ width: 85, height: 30 }}
+          <Image style={{ width: 110, height: 40 }}
             source={require('../../img/lumenx2.png')} />
         </View>
         <TouchableOpacity style={styles.btn}
@@ -198,9 +205,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   txtScan: {
-    fontSize: 18,
-    color: '#5585ff',
+    fontSize: 20,
+    color: '#1E90FF',
     fontWeight: "100",
+    fontWeight: 'bold',
   },
   img: {
     flex: 0.8,
