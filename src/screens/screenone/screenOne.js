@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
-import { Header, Left, Right, Icon, Container } from 'native-base'
+import { Header, Text as TextBase, Left, Right, Icon, Container } from 'native-base'
 import {
   toByteArray,
   multicastIP,
@@ -132,10 +132,9 @@ export default class ScreenOne extends Component {
     }
     return (
       <View style={styles.mainContainer}>
-        <Container style={{
-          backgroundColor: 'blue', flexDirection: 'row', alignItems: 'center'
-        }}>
-          <Icon style={{ marginLeft: 10 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+        <Container style={styles.headerApp}>
+          <Icon style={styles.menuDrawer} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+          <Text style={styles.titleApp}>Smart Light</Text>
         </Container>
         <View style={styles.img}>
           <Image style={{ width: 85, height: 30 }}
@@ -208,5 +207,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: '#fff'
+  },
+  titleApp: {
+    color: 'white',
+    fontSize: 30,
+    marginLeft:75
+  
+  },
+  headerApp:{
+    backgroundColor: 'blue',
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  menuDrawer:{
+    marginLeft:10
   }
 })

@@ -4,13 +4,13 @@ import { createDrawerNavigator, DrawerItems } from 'react-navigation';
 import ScreenOne from "../screens/screenone/screenOne";
 import ScreenTwo from "../screens/screentwo/screenTwo";
 import ScreenThree from "../screens/screenthree/screenThree";
+
 import {
     SafeAreaView,
     Text,
     View,
     ScrollView
 } from "react-native"
-
 
 const CustomDrawerComponent = (props) => (
     <SafeAreaView style={{ flex: 1 }}>
@@ -20,10 +20,10 @@ const CustomDrawerComponent = (props) => (
         <ScrollView>
             <DrawerItems {...props} />
         </ScrollView>
-
     </SafeAreaView>
 
 )
+
 
 const App = createDrawerNavigator({
     FirstScreen: ScreenOne,
