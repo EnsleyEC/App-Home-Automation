@@ -132,16 +132,10 @@ export default class ScreenOne extends Component {
     }
     return (
       <View style={styles.mainContainer}>
-<<<<<<< HEAD
-        <Container style={styles.headerApp}>
-          <Icon style={styles.menuDrawer} name="menu" onPress={() => this.props.navigation.openDrawer()} />
-          <Text style={styles.titleApp}>Smart Light</Text>
-=======
         <Container style={{
           backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center'
         }}>
           <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
->>>>>>> bfc9811e46e74bf28becc8fd7f0fa934a4b31c97
         </Container>
         <View style={styles.img}>
           <Image style={{ width: 110, height: 40 }}
