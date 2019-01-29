@@ -15,7 +15,7 @@ import {
 const CustomDrawerComponent = (props) => (
     <SafeAreaView style={{ flex: 1 }}>
         <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Olá</Text>
+            {/* <Text>Olá</Text> */}
         </View>
         <ScrollView>
             <DrawerItems {...props} />
