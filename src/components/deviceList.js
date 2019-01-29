@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ChangeState from './buttonChange'
+import { Switch } from 'react-native-switch';
 
 export default class DeviceList extends Component {
   constructor() {
@@ -16,13 +17,14 @@ export default class DeviceList extends Component {
     this.state = {
       toggle: false,
       value: "",
+      switch: false
       // textValue:"OFF",
       // textColor: "#b71616",
     }
     this.onStateChange = this.onStateChange.bind(this);
   }
 
-  onStateChange(an) {
+  /* onStateChange(an) {
     const newState = !this.state.toggle;
     const value = newState ? 'ON' : 'OFF';
     this.setState({ toggle: newState });
@@ -31,14 +33,40 @@ export default class DeviceList extends Component {
 
     axios.get(`http://${an.ipdevice}/deviceValue?value=${value}`)
       .then(() => {
-        console.log('Chegou a resposta.') 
+        console.log('Chegou a resposta.')
         an.value = value;
         this.forceUpdate();
-       
-        
+
+
       }) /// TESTAR
       .catch(() => { console.log('Error'); })
-  }
+  } */
+
+   onStateChange(ip,newValue) {
+
+     
+     var value;
+     if(newValue === false)
+     {
+       value = 'OFF'
+     }
+     else
+     {
+       value = 'ON'
+     }
+     this.setState({ switch: newValue, value: "" });
+    // this.state.textValue = newState ? "ON" : "OFF";
+
+    axios.get(`http://${ip}/deviceValue?value=${value}`)
+      .then(() => {
+        console.log('Chegou a resposta.')
+        //an.value = value;
+        //this.forceUpdate();
+    
+
+      }) /// TESTAR
+      .catch(() => { console.log('Error'); })
+  } 
   removeDuplicates(myArr, prop) {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
@@ -80,9 +108,19 @@ export default class DeviceList extends Component {
             </View>
 
             <View style={styles.tabbutton}>
-              <ChangeState _onStateChange={this.onStateChange.bind(this)}
+              {/* <ChangeState _onStateChange={this.onStateChange.bind(this)}
                 textColorState={this.state.textColor}
-                _an={an} />
+                _an={an} /> */}
+              <Switch
+                value={this.state.switch}
+                onValueChange={(val) => this.onStateChange(an.ipdevice,val)}
+                disabled={false}
+                activeText={'On'}
+                inActiveText={'Off'}
+                backgroundActive={'green'}
+                backgroundInactive={'red'}
+                circleActiveColor={'#FFFFFF'}
+                circleInActiveColor={'#FFFFFF'} />
             </View>
           </View>
         </ScrollView>
