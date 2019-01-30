@@ -136,21 +136,22 @@ export default class ScreenOne extends Component {
           backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center'
         }}>
           <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+          <Icon style={{ marginLeft: 290}} name="refresh" onPress={() => this.startMulticast()} />
+
         </Container>
-        <View style={styles.img}>
-          <Image style={{ width: 110, height: 40 }}
-            source={require('../../img/lumenx2.png')} />
-        </View>
-        <TouchableOpacity style={styles.btn}
+        {/* <TouchableOpacity style={styles.btn}
           onPress={() => this.startMulticast()}>
           <Text style={styles.txtScan}>Escanear Dispositivos</Text>
-        </TouchableOpacity>
-
+        </TouchableOpacity> */}
         <View style={{ flex: 6 }}>
           <MenuAmb metaData={this.state.deviceDataList}
             // _startMulticast={this.startMulticast.bind(this)} //TIRAR ESSA LINHA
             _changeName={this.changeName.bind(this)}
             dataArrayAmb={this.state.amb} />
+        </View>
+        <View style={styles.img}>
+          <Image style={{ width: 110, height: 40 }}
+            source={require('../../img/lumenx2.png')} />
         </View>
       </View>
 
@@ -213,15 +214,15 @@ const styles = StyleSheet.create({
   titleApp: {
     color: 'white',
     fontSize: 30,
-    marginLeft:75
-  
+    marginLeft: 75
+
   },
-  headerApp:{
+  headerApp: {
     backgroundColor: 'blue',
-    flexDirection:'row',
-    alignItems:'center'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  menuDrawer:{
-    marginLeft:10
+  menuDrawer: {
+    marginLeft: 10
   }
 })
