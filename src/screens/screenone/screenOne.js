@@ -1,29 +1,28 @@
 import React, { Component } from 'react';
 import {
-  Button,
   Text,
   View,
   StyleSheet,
-  TouchableOpacity,
   Image
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
-import { Header, Text as TextBase, Left, Right, Icon, Container } from 'native-base'
+import { Text as TextBase,Icon, Container } from 'native-base'
 import {
   toByteArray,
   multicastIP,
   multicastPort
 } from '../../lib/utilities';
 
-import MenuAmb from '../../components/menuamb'
-
 // database
 import EnvironmentDAO from '../../models/database/environment'
-
+import DeviceItems from '../../components/devices';
+var obj;
 export default class ScreenOne extends Component {
-  constructor() {
-    super();
+
+  constructor(props) {
+
+    super(props);
 
     // verificando a criação do banco
     var database = new EnvironmentDAO()
@@ -87,9 +86,11 @@ export default class ScreenOne extends Component {
           this.state.deviceDataList.push(response.data);
           this.setState({ deviceDataList: this.state.deviceDataList });
           console.log('deviceDataList: ', this.state.deviceDataList.length, this.state.deviceDataList);
+         
         })
         .catch(() => { console.log('Error'); })
     }
+  
     return this.state.deviceDataList
   }
 
@@ -110,6 +111,7 @@ export default class ScreenOne extends Component {
       console.log(this.amountIp, this.state.arrayip);
       this.getData();
     });
+
   }
 
   removeDuplicates(arr) {
@@ -122,6 +124,12 @@ export default class ScreenOne extends Component {
     return unique_array
   }
 
+  verify() {
+    this.startMulticast()
+    this.forceUpdate()
+  }
+
+  
   render() {
     const { navigation } = this.props;
     const y = navigation.getParam('nameAmb');
@@ -133,21 +141,26 @@ export default class ScreenOne extends Component {
     return (
       <View style={styles.mainContainer}>
         <Container style={{
-          backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center'
+          backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
         }}>
           <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
-          <Icon style={{ marginLeft: 290}} name="refresh" onPress={() => this.startMulticast()} />
+          <Icon style={{ marginLeft: 290 }} name="refresh" onPress={() => this.verify()} />
 
         </Container>
-        {/* <TouchableOpacity style={styles.btn}
-          onPress={() => this.startMulticast()}>
-          <Text style={styles.txtScan}>Escanear Dispositivos</Text>
-        </TouchableOpacity> */}
+
         <View style={{ flex: 6 }}>
-          <MenuAmb metaData={this.state.deviceDataList}
-            // _startMulticast={this.startMulticast.bind(this)} //TIRAR ESSA LINHA
-            _changeName={this.changeName.bind(this)}
-            dataArrayAmb={this.state.amb} />
+
+          <Text>Dispositivos</Text>
+
+
+          {this.state.deviceDataList.map(
+            function (item) {
+              return (
+                <DeviceItems key={item.id} item={item}/>
+              )
+            })}
+
+
         </View>
         <View style={styles.img}>
           <Image style={{ width: 110, height: 40 }}

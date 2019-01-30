@@ -14,6 +14,10 @@ import DeviceList from '../components/deviceList'
 
 export default class MenuAmb extends Component {
 
+  constructor(props)
+  {
+    super(props)
+  }
 
   state = {
     activeSections: []

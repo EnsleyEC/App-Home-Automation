@@ -16,6 +16,7 @@ export default class DeviceList extends Component {
     this.state = {
       toggle: false,
       value: "",
+      switch:false
       // textValue:"OFF",
       // textColor: "#b71616",
     }
