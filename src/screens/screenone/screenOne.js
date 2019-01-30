@@ -16,6 +16,7 @@ import {
 
 // database
 import EnvironmentDAO from '../../models/database/environment'
+import DeviceDAO from '../../models/database/device'
 import DeviceItems from '../../components/devices';
 var obj;
 export default class ScreenOne extends Component {
@@ -24,9 +25,14 @@ export default class ScreenOne extends Component {
 
     super(props);
 
-    // verificando a criação do banco
-    var database = new EnvironmentDAO()
-    database.create_database()
+    // verificando a criação do banco e tabelas
+    var table_envi = new EnvironmentDAO()
+    table_envi.create_table()
+
+    var table_dev = new DeviceDAO()
+    table_dev.create_table()
+    table_dev.register_device('Cel da Rafa','111.111.111.111','OFF',this.props)
+    table_dev.viewAllDevices()
 
     this.multicastClient = null;
     this.arrayip = [];

@@ -13,7 +13,7 @@ export default class EnvironmentDAO extends Component {
         };
     }
 
-    create_database = () => {
+    create_table = () => {
 
         db.transaction(function (txn) {
             txn.executeSql(
