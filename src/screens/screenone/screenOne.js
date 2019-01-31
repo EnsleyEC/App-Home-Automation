@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
-import { Text as TextBase,Icon, Container } from 'native-base'
+import { Text as TextBase, Icon, Container } from 'native-base'
 import {
   toByteArray,
   multicastIP,
@@ -31,8 +31,8 @@ export default class ScreenOne extends Component {
 
     var table_dev = new DeviceDAO()
     table_dev.create_table()
-    table_dev.register_device('Cel da Rafa','111.111.111.111','OFF',this.props)
-    table_dev.viewAllDevices()
+    // table_dev.register_device('Cel da Rafa', '111.111.111.111', 'OFF', this.props)
+    // table_dev.viewAllDevices()
 
     this.multicastClient = null;
     this.arrayip = [];
@@ -92,11 +92,11 @@ export default class ScreenOne extends Component {
           this.state.deviceDataList.push(response.data);
           this.setState({ deviceDataList: this.state.deviceDataList });
           console.log('deviceDataList: ', this.state.deviceDataList.length, this.state.deviceDataList);
-         
+
         })
         .catch(() => { console.log('Error'); })
     }
-  
+
     return this.state.deviceDataList
   }
 
@@ -135,7 +135,7 @@ export default class ScreenOne extends Component {
     this.forceUpdate()
   }
 
-  
+
   render() {
     const { navigation } = this.props;
     const y = navigation.getParam('nameAmb');
@@ -155,16 +155,36 @@ export default class ScreenOne extends Component {
         </Container>
 
         <View style={{ flex: 6 }}>
+          <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Dispositivos</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ width: 120, height: 70, backgroundColor: '#FFB6C1', alignItems: 'center', justifyContent: 'center' }}>
+              <Text>Nome</Text>
+            </View>
+            <View style={{ width: 120, height: 70, backgroundColor: 'pink', alignItems: 'center', justifyContent: 'center' }} >
+              <Text>Ambiente</Text>
+            </View>
+            <View style={{ width: 120, height: 70, backgroundColor: '#FFB6C1',flexDirection: 'column',alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Click</Text>
 
-          <Text>Dispositivos</Text>
-
-
+            </View>
+          </View>
+          <View style={{backgroundColor:'gray', height: 6}}/>
           {this.state.deviceDataList.map(
+
             function (item) {
+
               return (
-                <DeviceItems key={item.id} item={item}/>
+                
+                <DeviceItems key={item.id} item={item} />
+               
               )
-            })}
+
+            }
+          )
+          }
+
 
 
         </View>
