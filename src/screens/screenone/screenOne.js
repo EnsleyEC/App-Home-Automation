@@ -3,7 +3,8 @@ import {
   Text,
   View,
   StyleSheet,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
@@ -74,10 +75,29 @@ export default class ScreenOne extends Component {
 
   sendMessage(msg) {
     console.log(msg);
-    this.multicastClient.send(msg, 0, msg.length, multicastPort, multicastIP, function (err) {
-      if (err) throw err;
-      console.log('Multicast sent: ', msg);
-    });
+    try {
+
+      this.multicastClient.send(msg, 0, msg.length, multicastPort, multicastIP, function (err) {
+        if (err) {
+
+          Alert.alert(
+            'Informação',
+            'Problema de conexão',
+            [
+              {
+                text: 'Ok',
+                onPress: () => console.log('Erro da internet'),
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+        console.log('Multicast sent: ', msg);
+      });
+
+    } catch (error) {
+      console.log('Erro = ' + error)
+    }
   }
   scan() {
     const buf = toByteArray('D');
@@ -149,28 +169,30 @@ export default class ScreenOne extends Component {
         <Container style={{
           backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
         }}>
+
           <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+
           <Icon style={{ marginLeft: 290 }} name="refresh" onPress={() => this.verify()} />
 
         </Container>
 
         <View style={{ flex: 6 }}>
           <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' , color:'#00008B' }}>Dispositivos</Text>
+            <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#00008B' }}>Dispositivos</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
             <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
-              <Text style = {{fontWeight: 'bold', color: '#00008B'}}>Nome</Text>
+              <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Nome</Text>
             </View>
             <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
-              <Text style = {{fontWeight: 'bold', color: '#00008B'}} >Ambiente</Text>
+              <Text style={{ fontWeight: 'bold', color: '#00008B' }} >Ambiente</Text>
             </View>
-            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff',flexDirection: 'column',alignItems: 'center', justifyContent: 'center' }}>
-            <Text style = {{fontWeight: 'bold', color: '#00008B'}}>Click</Text>
+            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Click</Text>
 
             </View>
           </View>
-          <View style={{backgroundColor:'#C71585', height: 6}}/>
+          <View style={{ backgroundColor: '#C71585', height: 6 }} />
           {this.state.deviceDataList.map(
 
             function (item) {
@@ -178,7 +200,7 @@ export default class ScreenOne extends Component {
               return (
 
                 <DeviceItems key={item.id} item={item} />
-               
+
               )
 
             }

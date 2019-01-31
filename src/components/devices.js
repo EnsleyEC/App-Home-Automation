@@ -42,7 +42,7 @@ export default class DeviceItems extends Component {
                             color="#00008B"
                             accessibilityLabel="Learn more about this purple button"
                         />
-                        <View style={{ backgroundColor: '#00008B', height: 6 }} />
+                        
                       
                     </View>
 

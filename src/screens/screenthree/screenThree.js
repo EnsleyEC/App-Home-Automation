@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
 import EnvironmentDAO from '../../models/database/environment'
+import { Text as TextBase, Icon, Container } from 'native-base'
+import Environment from '../../components/environment'
+
 var database = new EnvironmentDAO()
 
 export default class ScreenThree extends Component {
-    static navigationOptions = { title: 'Criar Ambiente', header: null };
+    static navigationOptions = { title: 'Ambiente', header: null };
 
     constructor(props) {
         super(props);
@@ -23,6 +26,18 @@ export default class ScreenThree extends Component {
         const { goBack } = this.props.navigation;
         return (
             <View style={styles.container}>
+                <Container style={{
+                    backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
+                    
+                }}>
+                   {/* // <TextBase style={{marginLeft:115, color:'white',fontWeight:'bold',fontSize:40}}>Lumenx</TextBase> */}
+                </Container>
+                
+                <View style = {{alignItems : 'center', marginTop: 15 }}>
+                    <Text style = {{color:'black', fontWeight:'bold', fontSize:20}}>Ambientes já cadastrados:</Text>
+                    <Environment/>
+           
+                </View>
 
                 <View style={styles.containerBody}>
                     <Text style={styles.txtTittle}>Criar Ambiente</Text>
@@ -65,12 +80,14 @@ const styles = StyleSheet.create({
         flex: 8,
         alignItems: 'center',
         backgroundColor: '#fff',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     txtTittle: {
         fontSize: 30,
         justifyContent: 'center',
         alignItems: 'center',
+        fontWeight:'bold', 
+        color: 'black'
     },
     txtInput: {
         margin: 40,
@@ -80,13 +97,19 @@ const styles = StyleSheet.create({
     },
     txtBtn: {
         fontSize: 22,
+        backgroundColor: '#DCDCDC',
         justifyContent: 'center',
         alignItems: 'center',
+        fontWeight:'bold', 
+        color: 'black'
     },
     btn: {
         margin: 20,
+        backgroundColor: '#DCDCDC',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        fontWeight:'bold', 
+        color: 'black'
     }
 });
