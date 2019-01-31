@@ -156,27 +156,27 @@ export default class ScreenOne extends Component {
 
         <View style={{ flex: 6 }}>
           <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Dispositivos</Text>
+            <Text style={{ fontSize: 25, fontWeight: 'bold' , color:'#00008B' }}>Dispositivos</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <View style={{ width: 120, height: 70, backgroundColor: '#FFB6C1', alignItems: 'center', justifyContent: 'center' }}>
-              <Text>Nome</Text>
+            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
+              <Text style = {{fontWeight: 'bold', color: '#00008B'}}>Nome</Text>
             </View>
-            <View style={{ width: 120, height: 70, backgroundColor: 'pink', alignItems: 'center', justifyContent: 'center' }} >
-              <Text>Ambiente</Text>
+            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
+              <Text style = {{fontWeight: 'bold', color: '#00008B'}} >Ambiente</Text>
             </View>
-            <View style={{ width: 120, height: 70, backgroundColor: '#FFB6C1',flexDirection: 'column',alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Click</Text>
+            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff',flexDirection: 'column',alignItems: 'center', justifyContent: 'center' }}>
+            <Text style = {{fontWeight: 'bold', color: '#00008B'}}>Click</Text>
 
             </View>
           </View>
-          <View style={{backgroundColor:'gray', height: 6}}/>
+          <View style={{backgroundColor:'#C71585', height: 6}}/>
           {this.state.deviceDataList.map(
 
             function (item) {
 
               return (
-                
+
                 <DeviceItems key={item.id} item={item} />
                
               )
