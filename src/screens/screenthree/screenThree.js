@@ -3,8 +3,6 @@ import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight } from 're
 import EnvironmentDAO from '../../models/database/environment'
 import { Text as TextBase, Icon, Container } from 'native-base'
 import Environment from '../../components/environment'
-import ScreenOne from '../screenone/screenOne'
-
 var database = new EnvironmentDAO()
 
 export default class ScreenThree extends Component {
@@ -21,8 +19,7 @@ export default class ScreenThree extends Component {
 
     }
 
-    componentWillMount()
-    {
+    componentWillMount() {
     }
 
     render() {
@@ -31,17 +28,17 @@ export default class ScreenThree extends Component {
             <View style={styles.container}>
                 <Container style={{
                     backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
-                    
+
                 }}>
-                   {/* // <TextBase style={{marginLeft:115, color:'white',fontWeight:'bold',fontSize:40}}>Lumenx</TextBase> */}
+                    {/* // <TextBase style={{marginLeft:115, color:'white',fontWeight:'bold',fontSize:40}}>Lumenx</TextBase> */}
                 </Container>
-                
-                <View style = {{alignItems : 'center', marginTop: 15 }}>
-                    <Text style = {{color:'black', fontWeight:'bold', fontSize:20}}>Ambientes já cadastrados:</Text>
+
+                <View style={{ alignItems: 'center', marginTop: 15 }}>
+                    <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Ambientes já cadastrados:</Text>
                     {
-                        <Environment/>
+                        <Environment />
                     }
-           
+
                 </View>
 
                 <View style={styles.containerBody}>
@@ -91,7 +88,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight:'bold', 
+        fontWeight: 'bold',
         color: 'black'
     },
     txtInput: {
@@ -105,7 +102,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#DCDCDC',
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight:'bold', 
+        fontWeight: 'bold',
         color: 'black'
     },
     btn: {
@@ -114,7 +111,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight:'bold', 
+        fontWeight: 'bold',
         color: 'black'
     }
 });

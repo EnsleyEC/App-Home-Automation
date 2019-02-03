@@ -18,7 +18,7 @@ export default class DeviceItems extends Component {
                     <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontWeight: 'bold', color: 'black' }}>{this.props.item.name}</Text>
                         <View style={{ backgroundColor: '#00008B', height: 6 }} />
-                      
+
                     </View>
                     <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
                         <Text style={{ fontWeight: 'bold', color: 'black' }}>{this.props.item.environment}</Text>
@@ -38,8 +38,8 @@ export default class DeviceItems extends Component {
                             color="#00008B"
                             accessibilityLabel="Learn more about this purple button"
                         />
-                        
-                      
+
+
                     </View>
 
 
@@ -70,7 +70,7 @@ export default class DeviceItems extends Component {
             .then(() => {
                 console.log('Chegou a resposta.')
 
-            }) 
+            })
             .catch(() => { console.log('Error'); })
     }
 }
