@@ -69,19 +69,24 @@ export default class EnvironmentDAO extends Component {
     }
 
     viewAllEnvironment = () => {
-
+        var temp = []
+        
         db.transaction(tx => {
             tx.executeSql('SELECT * FROM environment', [], (tx, results) => {
-                var temp = [];
+                
                 for (let i = 0; i < results.rows.length; ++i) {
                     temp.push(results.rows.item(i));
-                    // mostrando os ambientes na tela
-                    alert(results.rows.item(i).name)
+                    
                 }
+                
                 this.setState({
                     dataSource: ds.cloneWithRows(temp),
                 });
+                
+                
+                
             });
+    
         })
 
     }

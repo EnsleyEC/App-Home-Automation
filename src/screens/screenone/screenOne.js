@@ -19,16 +19,20 @@ import {
 import EnvironmentDAO from '../../models/database/environment'
 import DeviceDAO from '../../models/database/device'
 import DeviceItems from '../../components/devices';
-var obj;
+import Spinner from 'react-native-loading-spinner-overlay';
+
 export default class ScreenOne extends Component {
+
+  static environments = [];
 
   constructor(props) {
 
     super(props);
 
     // verificando a criação do banco e tabelas
-    var table_envi = new EnvironmentDAO()
-    table_envi.create_table()
+    this.table_envi = new EnvironmentDAO()
+    this.table_envi.create_table()
+
 
     var table_dev = new DeviceDAO()
     table_dev.create_table()
@@ -42,8 +46,20 @@ export default class ScreenOne extends Component {
     this.state = {
       deviceDataList: [],
       arrayip: [],
-      amb: ["Default"]
+      amb: ["Default"],
+      spinner: true
     };
+
+    const ob = { "id": 1, "ipdevice": "111.111.111.111", "name": "Teste", "value": "OFF" }
+    const ob2 = { "id": 2, "ipdevice": "222.222.222.222", "name": "Teste 2", "value": "ON" }
+
+    const ob3 = { "id": 3, "ipdevice": "333.333.333.333", "name": "Teste 3", "value": "ON" }
+
+    this.listaDeTeste = []
+    this.listaDeTeste.push(ob)
+    this.listaDeTeste.push(ob2)
+
+    this.listaDeTeste.push(ob3)
 
     this.changeName = this.changeName.bind(this);
   }
@@ -58,8 +74,18 @@ export default class ScreenOne extends Component {
 
   componentWillMount() {
     this.startMulticast()
-  }
+    this.tam = this.table_envi.viewAllEnvironment()
+    setTimeout(() => {
 
+      this.setState({
+
+        spinner: false
+
+      });
+
+
+    }, 6000);
+  }
 
   componentWillReceiveProps() {
     this.startMulticast()
@@ -165,78 +191,85 @@ export default class ScreenOne extends Component {
       this.state.amb = this.removeDuplicates(this.state.amb);
     }
     return (
+
+
       <View style={styles.mainContainer}>
-        <Container style={{
-          backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
-        }}>
+        {this.state.spinner == false ? (
 
-          <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+          <View style={{flex:1}} >
+            <Container style={{
+              backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
+            }}>
 
-          <Icon style={{ marginLeft: 290 }} name="refresh" onPress={() => this.verify()} />
+              <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
 
-        </Container>
+              <Icon style={{ marginLeft: 290 }} name="refresh" onPress={() => this.verify()} />
 
-        <View style={{ flex: 6 }}>
-          <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#00008B' }}>Dispositivos</Text>
+            </Container>
+
+            <View style={{ flex: 6 }}>
+
+              <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#00008B' }}>Dispositivos</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Nome</Text>
+                </View>
+                <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
+                  <Text style={{ fontWeight: 'bold', color: '#00008B' }} >Ambiente</Text>
+                </View>
+                <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Click</Text>
+
+                </View>
+              </View>
+              <View style={{ backgroundColor: '#C71585', height: 6 }} />
+              {
+                this.listaDeTeste.map(
+
+                  function (item) {
+
+                    return (
+
+                      <DeviceItems key={item.id} item={item} />
+
+                    )
+
+                  }
+                )
+              }
+
+
+
+            </View>
+
+
+            <View style={styles.img}>
+              <Image style={{ width: 110, height: 40 }}
+                source={require('../../img/lumenx2.png')} />
+            </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Nome</Text>
-            </View>
-            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
-              <Text style={{ fontWeight: 'bold', color: '#00008B' }} >Ambiente</Text>
-            </View>
-            <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Click</Text>
 
-            </View>
-          </View>
-          <View style={{ backgroundColor: '#C71585', height: 6 }} />
-          {this.state.deviceDataList.map(
+        ) : (
+            <Spinner
 
-            function (item) {
+              visible={this.state.spinner}
 
-              return (
+              textContent={'Loading...'}
 
-                <DeviceItems key={item.id} item={item} />
+              textStyle={{ color: '#FFF' }}
 
-              )
-
-            }
-          )
-          }
-
-
-
-        </View>
-        <View style={styles.img}>
-          <Image style={{ width: 110, height: 40 }}
-            source={require('../../img/lumenx2.png')} />
-        </View>
+            />
+          )}
       </View>
 
 
     );
 
   }
-}
 
-const style1 = StyleSheet.create({
-  menu: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#5585ff',
-    justifyContent: 'space-between',
-    paddingTop: 12,
-  },
-  txt: {
-    fontSize: 25,
-    color: '#fff',
-    paddingTop: 10,
-    fontWeight: "100",
-  },
-});
+}
 
 const styles = StyleSheet.create({
   mainContainer: {

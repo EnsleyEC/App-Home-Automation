@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight } from 're
 import EnvironmentDAO from '../../models/database/environment'
 import { Text as TextBase, Icon, Container } from 'native-base'
 import Environment from '../../components/environment'
+import ScreenOne from '../screenone/screenOne'
 
 var database = new EnvironmentDAO()
 
@@ -12,6 +13,7 @@ export default class ScreenThree extends Component {
     constructor(props) {
         super(props);
         this.state = { newname: '', amb: ["Default"] };
+        alert(ScreenOne.environments)
     }
 
     _saveEnvironment(nameAmb) {
@@ -20,10 +22,12 @@ export default class ScreenThree extends Component {
 
     }
 
+    componentWillMount()
+    {
+    }
+
     render() {
-        const { navigation } = this.props;
-        const ip = navigation.getParam('ip', '');
-        const { goBack } = this.props.navigation;
+
         return (
             <View style={styles.container}>
                 <Container style={{
@@ -35,7 +39,9 @@ export default class ScreenThree extends Component {
                 
                 <View style = {{alignItems : 'center', marginTop: 15 }}>
                     <Text style = {{color:'black', fontWeight:'bold', fontSize:20}}>Ambientes já cadastrados:</Text>
-                    <Environment/>
+                    {
+                        <Environment/>
+                    }
            
                 </View>
 
