@@ -90,12 +90,12 @@ export default class ScreenOne extends Component {
     setTimeout(() => {
 
       this.setState({
-        amb_name: this.state.amb[0].name,
+        amb_name: 'Todos',
         spinner: false
 
       });
 
-    }, 6000);
+    }, 4000);
   }
 
   componentWillReceiveProps() {
@@ -206,9 +206,24 @@ export default class ScreenOne extends Component {
 
   updatePicker(op) {
     ScreenOne.environment = op;
-    this.setState({amb_name: op})
+    this.setState({ amb_name: op })
   }
- 
+
+  noDevicesFoundMessage() {
+    Alert.alert(
+      'Informação',
+      'Nenhum dispositivo encontrado!',
+      [
+        {
+          text: 'Ok',
+          onPress: () => console.log(
+            'Nenhum device encontrado!'),
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
   render() {
     const { navigation } = this.props;
     const y = navigation.getParam('nameAmb');
@@ -219,7 +234,15 @@ export default class ScreenOne extends Component {
     }
     // Ordenar a lista por ambiente
     this.listaDeTeste.sort(this.dynamicSort("environment"))
-    this.newArray = this.listaDeTeste.filter(device => device.environment == this.state.amb_name )
+    this.newArray = this.listaDeTeste;
+
+    // Verificando se é necessário fazer filtro
+    if (this.state.amb_name != 'Todos')
+      this.newArray = this.listaDeTeste.filter(device => device.environment == this.state.amb_name)
+
+    // Se a lista de devices estiver vazia, nenhum dispostivo foi encontrado!
+    if (this.newArray.length == 0 && this.state.spinner == false)
+      this.noDevicesFoundMessage()
 
     return (
 
@@ -238,7 +261,7 @@ export default class ScreenOne extends Component {
 
             </Container>
 
-            <View style={{ alignItems:'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#00008B', marginVertical: 10 }}>Selecione o ambiente: </Text>
               <Picker
                 mode="dropdown"
@@ -246,6 +269,7 @@ export default class ScreenOne extends Component {
                 selectedValue={this.state.amb_name}
                 onValueChange={(itemValue, itemIndex) => { this.updatePicker(itemValue) }}
               >
+                <Picker.item label='Todos' value='Todos' />
                 {this.state.amb.map((item) => {
                   return (
                     <Picker.Item label={item.name} value={item.name} />

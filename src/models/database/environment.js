@@ -38,7 +38,7 @@ export default class EnvironmentDAO extends Component {
         });
     }
 
-    register_environment = (envi_name,nav) => {
+    register_environment = (envi_name, nav) => {
 
         db.transaction(function (tx) {
             tx.executeSql(
@@ -70,24 +70,24 @@ export default class EnvironmentDAO extends Component {
 
     viewAllEnvironment = (obj) => {
         var temp = []
-        
+
         db.transaction(tx => {
             tx.executeSql('SELECT * FROM environment', [], (tx, results) => {
-                
+
                 for (let i = 0; i < results.rows.length; ++i) {
                     temp.push(results.rows.item(i));
-                    
+
                 }
 
                 obj.state.amb = temp;
-                
+
             });
-    
+
         })
 
     }
 
-    delete_environment = (envi_name) => {
+    delete_environment = (envi_name, nav) => {
 
         db.transaction(function (tx) {
             tx.executeSql(
@@ -103,7 +103,7 @@ export default class EnvironmentDAO extends Component {
                                 {
                                     text: 'Ok',
                                     onPress: () =>
-                                        console.log('Ambiente deletado com sucesso!'),
+                                        nav.navigation.goBack(),
                                 },
                             ],
                             { cancelable: false }

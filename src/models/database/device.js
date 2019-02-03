@@ -46,7 +46,7 @@ export default class DeviceDAO extends Component {
         db.transaction(function (tx) {
             tx.executeSql(
                 'INSERT INTO device(name, ip, state, environment) VALUES (?,?,?,?)',
-                [dev_name,dev_ip,dev_state,dev_environment],
+                [dev_name, dev_ip, dev_state, dev_environment],
                 (tx, results) => {
                     console.log('Results', results.rowsAffected);
                     if (results.rowsAffected > 0) {
@@ -86,5 +86,5 @@ export default class DeviceDAO extends Component {
 
     }
 
-   
+
 }

@@ -10,16 +10,85 @@ export default class ScreenThree extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { newname: '', amb: ["Default"] };
+        this.state = { nameAmb: '' };
     }
 
     _saveEnvironment(nameAmb) {
-        // PRECISA GRAVAR NO SQLITE
-        database.register_environment(nameAmb, '111.111.111-11', this.props)
+        database.register_environment(nameAmb, this.props)
+    }
+
+    _deleteEnvironment(nameAmb) {
+
+        database.delete_environment(nameAmb, this.props)
+        // remover o ambiente de todos os dispositivos também
+    }
+
+    _updateEnvironment(nameAmb) {
+        database.update_environment(nameAmb, this.props)
+        // atualizar o ambiente de todos os dispositivos também
+    }
+
+    _validateText() {
+        if (this.state.nameAmb.length == 0) {
+            Alert.alert(
+                'Informação',
+                'Campo do nome vazio!',
+                [
+                    {
+                        text: 'Ok',
+                        onPress: () => console.log('Campo do nome do ambiente vazio!'),
+                    }
+                ],
+                { cancelable: false },
+            );
+
+            return false
+        }
+        return true
+    }
+
+    _confirmDeleteMessage(nameAmb) {
+
+        if (this._validateText()) {
+            Alert.alert(
+                'Informação',
+                'Deseja mesmo deletar o ambiente?',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Operação cancelada!'),
+                        style: 'cancel',
+                    },
+                    { text: 'Sim', onPress: () => this._deleteEnvironment(nameAmb) },
+                ],
+                { cancelable: false },
+            );
+
+
+        }
+
+
 
     }
 
-    componentWillMount() {
+    _confirmCreateMessage(nameAmb) {
+
+        if (this._validateText()) {
+            Alert.alert(
+                'Informação',
+                'Deseja mesmo criar o ambiente?',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Operação cancelada!'),
+                        style: 'cancel',
+                    },
+                    { text: 'Sim', onPress: () => this._saveEnvironment(nameAmb) },
+                ],
+                { cancelable: false },
+            );
+        }
+
     }
 
     render() {
@@ -42,7 +111,7 @@ export default class ScreenThree extends Component {
                 </View>
 
                 <View style={styles.containerBody}>
-                    <Text style={styles.txtTittle}>Criar Ambiente</Text>
+                    <Text style={styles.txtTittle}>Gerenciando ambientes</Text>
                     <TextInput
                         placeholder="Digite o nome do ambiente.."
                         style={styles.txtInput}
@@ -54,8 +123,15 @@ export default class ScreenThree extends Component {
 
                         <TouchableHighlight
                             style={styles.btn}
-                            onPress={() => this._saveEnvironment(this.state.nameAmb)}>
+                            onPress={() => this._confirmCreateMessage(this.state.nameAmb)}>
                             <Text style={styles.txtBtn}>Criar</Text>
+
+                        </TouchableHighlight>
+
+                        <TouchableHighlight
+                            style={styles.btn}
+                            onPress={() => this._confirmDeleteMessage(this.state.nameAmb)}>
+                            <Text style={styles.txtBtn}>Deletar</Text>
 
                         </TouchableHighlight>
 
@@ -66,6 +142,7 @@ export default class ScreenThree extends Component {
                             <Text style={styles.txtBtn}>Voltar</Text>
                         </TouchableHighlight>
                     </View>
+
                 </View>
             </View>
         );
@@ -106,7 +183,7 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     btn: {
-        margin: 20,
+        margin: 10,
         backgroundColor: '#DCDCDC',
         flex: 1,
         justifyContent: 'center',
