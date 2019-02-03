@@ -13,7 +13,6 @@ export default class ScreenThree extends Component {
     constructor(props) {
         super(props);
         this.state = { newname: '', amb: ["Default"] };
-        alert(ScreenOne.environments)
     }
 
     _saveEnvironment(nameAmb) {

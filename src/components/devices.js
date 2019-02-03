@@ -8,24 +8,20 @@ export default class DeviceItems extends Component {
 
     constructor(props) {
         super(props)
-        console.log('valores')
-        console.log(this.props.item.ipdevice)
-        console.log(this.props.item.value)
-
     }
 
     render() {
         return (
             <View>
 
-                <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontWeight: 'bold', color: 'black' }}>{this.props.item.ipdevice}</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'black' }}>{this.props.item.name}</Text>
                         <View style={{ backgroundColor: '#00008B', height: 6 }} />
                       
                     </View>
                     <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
-                        <Text style={{ fontWeight: 'bold', color: 'black' }}>Ambiente</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'black' }}>{this.props.item.environment}</Text>
                         <View style={{ backgroundColor: '#00008B', height: 6 }} />
                     </View>
                     <View style={{ width: 120, height: 70, flexDirection: 'column' }}>
@@ -33,7 +29,7 @@ export default class DeviceItems extends Component {
                         <Button style={{ width: 10, height: 15 }}
                             onPress={() => this.onStateChange(this.props.item.ipdevice, 'ON')}
                             title="ON"
-                            color="#C71585"
+                            color={this.props.item.value == "ON" ? "#C71585" : "gray"}
                             accessibilityLabel="Learn more about this purple button"
                         />
                         <Button style={{ width: 10, height: 25 }}
@@ -48,24 +44,10 @@ export default class DeviceItems extends Component {
 
 
                 </View>
+                <View style={{ backgroundColor: '#C71585', height: 6 }} />
             </View>
         )
     }
-
-    /*
-    
-    <Switch
-                   value={this.props.item.value == 'ON' ? true : false}
-                   onValueChange={(val) => this.onStateChange(this.props.item.ipdevice, val)}
-                   disabled={false}
-                   activeText={'On'}
-                   inActiveText={'Off'}
-                   backgroundActive={'#C71585'}
-                   backgroundInactive={'gray'}
-                   circleActiveColor={'#FFFFFF'}
-                   circleInActiveColor={'#FFFFFF'} />
- 
-    */
 
     onStateChange(ip, newValue) {
 
@@ -87,9 +69,8 @@ export default class DeviceItems extends Component {
         axios.get(`http://${ip}/deviceValue?value=${value}`)
             .then(() => {
                 console.log('Chegou a resposta.')
-                //this.forceUpdate()
 
-            }) /// TESTAR
+            }) 
             .catch(() => { console.log('Error'); })
     }
 }

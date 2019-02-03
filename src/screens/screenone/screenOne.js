@@ -4,7 +4,8 @@ import {
   View,
   StyleSheet,
   Image,
-  Alert
+  Alert,
+  ScrollView
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
@@ -46,20 +47,9 @@ export default class ScreenOne extends Component {
     this.state = {
       deviceDataList: [],
       arrayip: [],
-      amb: ["Default"],
+      amb: [],
       spinner: true
     };
-
-    const ob = { "id": 1, "ipdevice": "111.111.111.111", "name": "Teste", "value": "OFF" }
-    const ob2 = { "id": 2, "ipdevice": "222.222.222.222", "name": "Teste 2", "value": "ON" }
-
-    const ob3 = { "id": 3, "ipdevice": "333.333.333.333", "name": "Teste 3", "value": "ON" }
-
-    this.listaDeTeste = []
-    this.listaDeTeste.push(ob)
-    this.listaDeTeste.push(ob2)
-
-    this.listaDeTeste.push(ob3)
 
     this.changeName = this.changeName.bind(this);
   }
@@ -72,9 +62,33 @@ export default class ScreenOne extends Component {
 
   static navigationOptions = { title: 'Home', header: null };
 
+  initTest() {
+    const ob = { "id": 1, "ipdevice": "111.111.111.111", "name": "Teste", "value": "OFF", "environment": "Sala" }
+    const ob2 = { "id": 2, "ipdevice": "222.222.222.222", "name": "Teste 2", "value": "ON", "environment": "Cozinha" }
+
+    const ob3 = { "id": 3, "ipdevice": "333.333.333.333", "name": "Teste 3", "value": "ON", "environment": "Garagem" }
+
+    const ob4 = { "id": 4, "ipdevice": "111.111.111.111", "name": "Teste 4", "value": "OFF", "environment": "Sala" }
+    const ob5 = { "id": 5, "ipdevice": "222.222.222.222", "name": "Teste 5", "value": "ON", "environment": "Quarto" }
+
+    const ob6 = { "id": 6, "ipdevice": "333.333.333.333", "name": "Teste 6", "value": "ON", "environment": "Banheiro" }
+
+    this.listaDeTeste = []
+    this.listaDeTeste.push(ob)
+    this.listaDeTeste.push(ob2)
+
+    this.listaDeTeste.push(ob3)
+    this.listaDeTeste.push(ob4)
+    this.listaDeTeste.push(ob5)
+    this.listaDeTeste.push(ob6)
+
+  }
+
   componentWillMount() {
     this.startMulticast()
-    this.tam = this.table_envi.viewAllEnvironment()
+    this.table_envi.viewAllEnvironment(this)
+    this.initTest()
+
     setTimeout(() => {
 
       this.setState({
@@ -82,7 +96,6 @@ export default class ScreenOne extends Component {
         spinner: false
 
       });
-
 
     }, 6000);
   }
@@ -196,7 +209,7 @@ export default class ScreenOne extends Component {
       <View style={styles.mainContainer}>
         {this.state.spinner == false ? (
 
-          <View style={{flex:1}} >
+          <View style={{ flex: 1 }} >
             <Container style={{
               backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
             }}>
@@ -225,22 +238,23 @@ export default class ScreenOne extends Component {
                 </View>
               </View>
               <View style={{ backgroundColor: '#C71585', height: 6 }} />
-              {
-                this.listaDeTeste.map(
+              <ScrollView>
+                {
+                  this.listaDeTeste.map(
 
-                  function (item) {
+                    function (item) {
 
-                    return (
+                      return (
 
-                      <DeviceItems key={item.id} item={item} />
+                        <DeviceItems key={item.id} item={item} />
 
-                    )
+                      )
 
-                  }
-                )
-              }
+                    }
+                  )
+                }
 
-
+              </ScrollView>
 
             </View>
 

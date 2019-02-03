@@ -68,7 +68,7 @@ export default class EnvironmentDAO extends Component {
 
     }
 
-    viewAllEnvironment = () => {
+    viewAllEnvironment = (obj) => {
         var temp = []
         
         db.transaction(tx => {
@@ -78,12 +78,8 @@ export default class EnvironmentDAO extends Component {
                     temp.push(results.rows.item(i));
                     
                 }
-                
-                this.setState({
-                    dataSource: ds.cloneWithRows(temp),
-                });
-                
-                
+
+                obj.state.amb = temp;
                 
             });
     
