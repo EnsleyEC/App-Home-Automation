@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Image,
   Alert,
-  ScrollView
+  ScrollView,
+  Picker
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
@@ -24,7 +25,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class ScreenOne extends Component {
 
-  static environments = [];
+  static environment = ''
 
   constructor(props) {
 
@@ -33,7 +34,6 @@ export default class ScreenOne extends Component {
     // verificando a criação do banco e tabelas
     this.table_envi = new EnvironmentDAO()
     this.table_envi.create_table()
-
 
     var table_dev = new DeviceDAO()
     table_dev.create_table()
@@ -48,7 +48,8 @@ export default class ScreenOne extends Component {
       deviceDataList: [],
       arrayip: [],
       amb: [],
-      spinner: true
+      spinner: true,
+      amb_name: ''
     };
 
     this.changeName = this.changeName.bind(this);
@@ -65,22 +66,19 @@ export default class ScreenOne extends Component {
   initTest() {
     const ob = { "id": 1, "ipdevice": "111.111.111.111", "name": "Teste", "value": "OFF", "environment": "Sala" }
     const ob2 = { "id": 2, "ipdevice": "222.222.222.222", "name": "Teste 2", "value": "ON", "environment": "Cozinha" }
-
     const ob3 = { "id": 3, "ipdevice": "333.333.333.333", "name": "Teste 3", "value": "ON", "environment": "Garagem" }
-
     const ob4 = { "id": 4, "ipdevice": "111.111.111.111", "name": "Teste 4", "value": "OFF", "environment": "Sala" }
     const ob5 = { "id": 5, "ipdevice": "222.222.222.222", "name": "Teste 5", "value": "ON", "environment": "Quarto" }
-
     const ob6 = { "id": 6, "ipdevice": "333.333.333.333", "name": "Teste 6", "value": "ON", "environment": "Banheiro" }
 
     this.listaDeTeste = []
     this.listaDeTeste.push(ob)
     this.listaDeTeste.push(ob2)
-
     this.listaDeTeste.push(ob3)
     this.listaDeTeste.push(ob4)
     this.listaDeTeste.push(ob5)
     this.listaDeTeste.push(ob6)
+
 
   }
 
@@ -92,7 +90,7 @@ export default class ScreenOne extends Component {
     setTimeout(() => {
 
       this.setState({
-
+        amb_name: this.state.amb[0].name,
         spinner: false
 
       });
@@ -193,6 +191,7 @@ export default class ScreenOne extends Component {
     this.startMulticast()
     this.forceUpdate()
   }
+
   dynamicSort(property) {
     var sortOrder = 1;
     if (property[0] === "-") {
@@ -205,8 +204,11 @@ export default class ScreenOne extends Component {
     }
   }
 
-  //  const newListSort = newList.sort(this.dynamicSort("name"));
-
+  updatePicker(op) {
+    ScreenOne.environment = op;
+    this.setState({amb_name: op})
+  }
+ 
   render() {
     const { navigation } = this.props;
     const y = navigation.getParam('nameAmb');
@@ -215,6 +217,10 @@ export default class ScreenOne extends Component {
       this.state.amb.push(y);
       this.state.amb = this.removeDuplicates(this.state.amb);
     }
+    // Ordenar a lista por ambiente
+    this.listaDeTeste.sort(this.dynamicSort("environment"))
+    this.newArray = this.listaDeTeste.filter(device => device.environment == this.state.amb_name )
+
     return (
 
 
@@ -231,6 +237,24 @@ export default class ScreenOne extends Component {
               <Icon style={{ marginLeft: 290 }} name="refresh" onPress={() => this.verify()} />
 
             </Container>
+
+            <View style={{ alignItems:'center'}}>
+              <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#00008B', marginVertical: 10 }}>Selecione o ambiente: </Text>
+              <Picker
+                mode="dropdown"
+                style={{ color: '#C71585', backgroundColor: '#DCDCDC', width: 170 }}
+                selectedValue={this.state.amb_name}
+                onValueChange={(itemValue, itemIndex) => { this.updatePicker(itemValue) }}
+              >
+                {this.state.amb.map((item) => {
+                  return (
+                    <Picker.Item label={item.name} value={item.name} />
+                  )
+                })
+
+                }
+              </Picker>
+            </View>
 
             <View style={{ flex: 6 }}>
 
@@ -252,7 +276,7 @@ export default class ScreenOne extends Component {
               <View style={{ backgroundColor: '#C71585', height: 6 }} />
               <ScrollView>
                 {
-                  this.listaDeTeste.map(
+                  this.newArray.map(
 
                     function (item) {
 

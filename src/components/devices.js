@@ -45,6 +45,7 @@ export default class DeviceItems extends Component {
 
                 </View>
                 <View style={{ backgroundColor: '#C71585', height: 6 }} />
+
             </View>
         )
     }

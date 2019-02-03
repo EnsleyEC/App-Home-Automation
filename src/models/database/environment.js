@@ -25,7 +25,7 @@ export default class EnvironmentDAO extends Component {
                     if (res.rows.length == 0) {
                         txn.executeSql('DROP TABLE IF EXISTS environment', []);
                         txn.executeSql(
-                            'CREATE TABLE IF NOT EXISTS environment(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), ip VARCHAR(20))',
+                            'CREATE TABLE IF NOT EXISTS environment(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(25))',
                             []
                         );
 
@@ -38,12 +38,12 @@ export default class EnvironmentDAO extends Component {
         });
     }
 
-    register_environment = (envi_name, envi_ip, nav) => {
+    register_environment = (envi_name,nav) => {
 
         db.transaction(function (tx) {
             tx.executeSql(
-                'INSERT INTO environment (name, ip) VALUES (?,?)',
-                [envi_name, envi_ip],
+                'INSERT INTO environment (name) VALUES (?)',
+                [envi_name],
                 (tx, results) => {
                     console.log('Results', results.rowsAffected);
                     if (results.rowsAffected > 0) {
@@ -139,6 +139,35 @@ export default class EnvironmentDAO extends Component {
                         );
                     } else {
                         alert('Erro ao atualizar o ambiente!');
+                    }
+                }
+            );
+        });
+
+    }
+
+    deleteAllEnvironments = () => {
+
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'DELETE from environment',
+                (tx, results) => {
+                    console.log('Results', results.rowsAffected);
+                    if (results.rowsAffected > 0) {
+                        Alert.alert(
+                            'Informação',
+                            'Ambiente(s) deletado(s) com sucesso!!',
+                            [
+                                {
+                                    text: 'Ok',
+                                    onPress: () =>
+                                        console.log('Ambiente deletado com sucesso!'),
+                                },
+                            ],
+                            { cancelable: false }
+                        );
+                    } else {
+                        alert('Erro ao deletar o ambiente!');
                     }
                 }
             );
