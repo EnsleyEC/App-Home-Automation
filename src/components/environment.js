@@ -14,7 +14,7 @@ export default class Environment extends Component {
 
         return (
             <Picker
-                style={{ color: '#C71585', backgroundColor: '#DCDCDC', width: 150, marginTop: 15 }}
+                style={{ color: '#00008B', backgroundColor: '#DCDCDC', width: 150, marginTop: 15 }}
                 selectedValue={this.state.envi_name}
                 onValueChange={op => { this.setState({ envi_name: op }) }}
             >

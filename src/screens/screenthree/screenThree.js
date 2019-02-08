@@ -96,7 +96,7 @@ export default class ScreenThree extends Component {
         return (
             <View style={styles.container}>
                 <Container style={{
-                    backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
+                    backgroundColor: '#00008B', flexDirection: 'row', alignItems: 'center', height: 30
 
                 }}>
                     {/* // <TextBase style={{marginLeft:115, color:'white',fontWeight:'bold',fontSize:40}}>Lumenx</TextBase> */}

@@ -22,6 +22,9 @@ import EnvironmentDAO from '../../models/database/environment'
 import DeviceDAO from '../../models/database/device'
 import DeviceItems from '../../components/devices';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
+import { Thumbnail, List, ListItem, Separator } from 'native-base';
+import TextExtra from '../../components/testExtra'
 
 export default class ScreenOne extends Component {
 
@@ -66,18 +69,11 @@ export default class ScreenOne extends Component {
   initTest() {
     const ob = { "id": 1, "ipdevice": "111.111.111.111", "name": "Teste", "value": "OFF", "environment": "Sala" }
     const ob2 = { "id": 2, "ipdevice": "222.222.222.222", "name": "Teste 2", "value": "ON", "environment": "Cozinha" }
-    const ob3 = { "id": 3, "ipdevice": "333.333.333.333", "name": "Teste 3", "value": "ON", "environment": "Garagem" }
-    const ob4 = { "id": 4, "ipdevice": "111.111.111.111", "name": "Teste 4", "value": "OFF", "environment": "Sala" }
-    const ob5 = { "id": 5, "ipdevice": "222.222.222.222", "name": "Teste 5", "value": "ON", "environment": "Quarto" }
-    const ob6 = { "id": 6, "ipdevice": "333.333.333.333", "name": "Teste 6", "value": "ON", "environment": "Banheiro" }
 
     this.listaDeTeste = []
     this.listaDeTeste.push(ob)
     this.listaDeTeste.push(ob2)
-    this.listaDeTeste.push(ob3)
-    this.listaDeTeste.push(ob4)
-    this.listaDeTeste.push(ob5)
-    this.listaDeTeste.push(ob6)
+
 
 
   }
@@ -232,6 +228,7 @@ export default class ScreenOne extends Component {
       this.state.amb.push(y);
       this.state.amb = this.removeDuplicates(this.state.amb);
     }
+
     // Ordenar a lista por ambiente
     this.listaDeTeste.sort(this.dynamicSort("environment"))
     this.newArray = this.listaDeTeste;
@@ -244,6 +241,8 @@ export default class ScreenOne extends Component {
     if (this.newArray.length == 0 && this.state.spinner == false)
       this.noDevicesFoundMessage()
 
+
+
     return (
 
 
@@ -252,20 +251,23 @@ export default class ScreenOne extends Component {
 
           <View style={{ flex: 1 }} >
             <Container style={{
-              backgroundColor: '#C71585', flexDirection: 'row', alignItems: 'center', height: 30
+              backgroundColor: '#191970', flexDirection: 'row', alignItems: 'center', height: 30
             }}>
+              {/*   <Icon style={{width:10, height:10}}
+                  source={require('../../img/logo-tok.png')} />
+          */}
 
-              <Icon style={{ marginLeft: 15 }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+              <Icon style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
 
-              <Icon style={{ marginLeft: 290 }} name="refresh" onPress={() => this.verify()} />
+              <Icon style={{ marginLeft: 290, color: 'white' }} name="refresh" onPress={() => this.verify()} />
 
             </Container>
 
             <View style={{ alignItems: 'center' }}>
-              <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#00008B', marginVertical: 10 }}>Selecione o ambiente: </Text>
-              <Picker
+              {/* <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#00008B', marginVertical: 10 }}>Selecione o ambiente: </Text> */}
+              {/*          <Picker
                 mode="dropdown"
-                style={{ color: '#C71585', backgroundColor: '#DCDCDC', width: 170 }}
+                style={{ marginTop: 15, color: '#00008B', backgroundColor: '#DCDCDC', width: 170 }}
                 selectedValue={this.state.amb_name}
                 onValueChange={(itemValue, itemIndex) => { this.updatePicker(itemValue) }}
               >
@@ -277,43 +279,48 @@ export default class ScreenOne extends Component {
                 })
 
                 }
-              </Picker>
+              </Picker> */}
             </View>
 
             <View style={{ flex: 6 }}>
 
               <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#00008B' }}>Dispositivos</Text>
+                <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#00008B' }}>Ambientes</Text>
               </View>
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Nome</Text>
-                </View>
-                <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
-                  <Text style={{ fontWeight: 'bold', color: '#00008B' }} >Ambiente</Text>
-                </View>
-                <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ fontWeight: 'bold', color: '#00008B' }}>Click</Text>
 
-                </View>
-              </View>
               <View style={{ backgroundColor: '#C71585', height: 6 }} />
               <ScrollView>
-                {
-                  this.newArray.map(
 
-                    function (item) {
+                {this.state.amb.map((amb) => {
+                  return (
+                    <Collapse>
+                      <CollapseHeader>
+                        <Separator bordered>
+                          <Text>{amb.name}</Text>
+                        </Separator>
+                      </CollapseHeader>
+                      <CollapseBody>
+                        {
+                          this.listaDeTeste.map(function (item) {
+                            return (
+                              <ListItem >
+                                <View style={{ flexDirection: 'column' }}>
+                                  <Text>{item.ipdevice}</Text>
 
-                      return (
+                                  <TextExtra item={item} />
 
-                        <DeviceItems key={item.id} item={item} />
+                                </View>
 
-                      )
+                              </ListItem>
+                            )
+                          })
+                        }
 
-                    }
+                      </CollapseBody>
+
+                    </Collapse>
                   )
-                }
-
+                })}
               </ScrollView>
 
             </View>
@@ -348,11 +355,11 @@ export default class ScreenOne extends Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: 'whitesmoke',
+    backgroundColor: '#A9A9A9',
   },
   second: {
     flex: 1,
-    backgroundColor: 'whitesmoke',
+    backgroundColor: '#A9A9A9',
   },
   btn: {
     height: 40,

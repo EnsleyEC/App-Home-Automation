@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch } from 'react-native-switch'
-import { Text, Button, View } from 'react-native'
+import { Text, Button, View,TouchableHighlight } from 'react-native'
 import axios from 'axios';
 
 
@@ -9,24 +9,37 @@ export default class DeviceItems extends Component {
     constructor(props) {
         super(props)
     }
-
+    verify()
+    {
+        var value = this.props.item.value;
+        
+        if(value == "OFF")
+           this.props.item.value = "ON";
+        else
+           this.props.item.value = "OFF"; 
+           
+        this.forceUpdate()   
+    }
     render() {
         return (
             <View>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ width: 120, height: 70, backgroundColor: '#A9A9A9', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontWeight: 'bold', color: 'black' }}>{this.props.item.name}</Text>
-                        <View style={{ backgroundColor: '#00008B', height: 6 }} />
+                        <View style={{ backgroundColor: '#A9A9A9', height: 6 }} />
 
                     </View>
-                    <View style={{ width: 120, height: 70, backgroundColor: '#ffffff', alignItems: 'center', justifyContent: 'center' }} >
+                    <View style={{ width: 120, height: 70, backgroundColor: '#A9A9A9', alignItems: 'center', justifyContent: 'center' }} >
                         <Text style={{ fontWeight: 'bold', color: 'black' }}>{this.props.item.environment}</Text>
-                        <View style={{ backgroundColor: '#00008B', height: 6 }} />
+                        <View style={{ backgroundColor: '#A9A9A9', height: 6 }} />
                     </View>
                     <View style={{ width: 120, height: 70, flexDirection: 'column' }}>
-
-                        <Button style={{ width: 10, height: 15 }}
+                        <TouchableHighlight
+                            onPress={() => this.verify()}>
+                            <Text style={this.props.item.value == "ON" ? {color:'green', fontWeight:'bold'} : {color:'red',fontWeight:'bold'}}>{this.props.item.value}</Text>
+                        </TouchableHighlight>
+                        {/*  <Button style={{ width: 10, height: 15 }}
                             onPress={() => this.onStateChange(this.props.item.ipdevice, 'ON')}
                             title="ON"
                             color={this.props.item.value == "ON" ? "#C71585" : "gray"}
@@ -38,7 +51,7 @@ export default class DeviceItems extends Component {
                             color="#00008B"
                             accessibilityLabel="Learn more about this purple button"
                         />
-
+ */}
 
                     </View>
 
