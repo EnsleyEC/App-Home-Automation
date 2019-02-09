@@ -37,7 +37,7 @@ export default class DeviceItems extends Component {
                     <View style={{ width: 120, height: 70, flexDirection: 'column' }}>
                         <TouchableHighlight
                             onPress={() => this.verify()}>
-                            <Text style={this.props.item.value == "ON" ? {color:'green', fontWeight:'bold'} : {color:'red',fontWeight:'bold'}}>{this.props.item.value}</Text>
+                            <Text style={this.props.item.value == "ON" ? {color:'green', fontWeight:'bold'} : {color:'red',fontWeight:'bold'}} >{this.props.item.value}</Text>
                         </TouchableHighlight>
                         {/*  <Button style={{ width: 10, height: 15 }}
                             onPress={() => this.onStateChange(this.props.item.ipdevice, 'ON')}

@@ -4,6 +4,7 @@ import {
     Text,
     View
 } from 'react-native';
+import axios from 'axios';
 
 
 export default class TestExtra extends Component {
@@ -12,21 +13,37 @@ export default class TestExtra extends Component {
         super(props)
 
         this.state = {
+            ip:'',
             value: ''
         }
     }
 
     componentWillMount() {
-        this.setState({ value: this.props.item.value });
+        this.setState({ value: this.props.item.value, ip: this.props.item.ipdevice });
     }
 
     changeName() {
+        var value;
+
         if (this.state.value == "ON") {
             this.state.value = "OFF"
+            value = 'OFF';
+           
         }
         else {
             this.state.value = "ON"
+            value = 'ON';
         }
+
+        
+        axios.get(`http://${this.state.ip}/deviceValue?value=${value}`)
+            .then(() => {
+                console.log('Chegou a resposta.')
+
+            })
+            .catch(() => { console.log('Error'); })
+
+
         this.forceUpdate()
 
     }
@@ -39,6 +56,25 @@ export default class TestExtra extends Component {
             </View>
 
         );
+
+    }
+
+    onStateChange(ip, newValue) {
+
+        var value;
+
+        if (newValue === "ON") {
+            console.log('ONLINE')
+            value = 'ON'
+        }
+        else {
+            console.log('OFE')
+            value = 'OFF'
+        }
+
+        console.log('Valores')
+        console.log(ip)
+        console.log(newValue)
 
     }
 

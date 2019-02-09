@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
-import { Text as TextBase, Icon, Container } from 'native-base'
+import { Text as TextBase, Icon as IconTwo, Container } from 'native-base'
 import {
   toByteArray,
   multicastIP,
@@ -25,6 +25,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import { Thumbnail, List, ListItem, Separator } from 'native-base';
 import TextExtra from '../../components/testExtra'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class ScreenOne extends Component {
 
@@ -229,19 +230,20 @@ export default class ScreenOne extends Component {
       this.state.amb = this.removeDuplicates(this.state.amb);
     }
 
-    // Ordenar a lista por ambiente
-    this.listaDeTeste.sort(this.dynamicSort("environment"))
-    this.newArray = this.listaDeTeste;
+    /* 
+        // Ordenar a lista por ambiente
+        this.listaDeTeste.sort(this.dynamicSort("environment"))
+        this.newArray = this.listaDeTeste;
+    
+        // Verificando se é necessário fazer filtro
+        if (this.state.amb_name != 'Todos')
+          this.newArray = this.listaDeTeste.filter(device => device.environment == this.state.amb_name)
+    
+        // Se a lista de devices estiver vazia, nenhum dispostivo foi encontrado!
+        if (this.newArray.length == 0 && this.state.spinner == false)
+          this.noDevicesFoundMessage() */
 
-    // Verificando se é necessário fazer filtro
-    if (this.state.amb_name != 'Todos')
-      this.newArray = this.listaDeTeste.filter(device => device.environment == this.state.amb_name)
-
-    // Se a lista de devices estiver vazia, nenhum dispostivo foi encontrado!
-    if (this.newArray.length == 0 && this.state.spinner == false)
-      this.noDevicesFoundMessage()
-
-
+    this.removeDuplicates(this.state.deviceDataList)
 
     return (
 
@@ -251,15 +253,15 @@ export default class ScreenOne extends Component {
 
           <View style={{ flex: 1 }} >
             <Container style={{
-              backgroundColor: '#191970', flexDirection: 'row', alignItems: 'center', height: 30
+              backgroundColor: '#002540', flexDirection: 'row', alignItems: 'center', height: 30
             }}>
               {/*   <Icon style={{width:10, height:10}}
                   source={require('../../img/logo-tok.png')} />
           */}
 
-              <Icon style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+              <IconTwo style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
 
-              <Icon style={{ marginLeft: 290, color: 'white' }} name="refresh" onPress={() => this.verify()} />
+              <IconTwo style={{ marginLeft: 290, color: 'white' }} name="refresh" onPress={() => this.verify()} />
 
             </Container>
 
@@ -285,28 +287,32 @@ export default class ScreenOne extends Component {
             <View style={{ flex: 6 }}>
 
               <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#00008B' }}>Ambientes</Text>
+                <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#001B2E' }}>Ambientes</Text>
               </View>
 
-              <View style={{ backgroundColor: '#C71585', height: 6 }} />
+              <View style={{ backgroundColor: '#001B2E', height: 6 }} />
+
               <ScrollView>
 
                 {this.state.amb.map((amb) => {
                   return (
-                    <Collapse>
+                    <Collapse key={amb.name}>
                       <CollapseHeader>
                         <Separator bordered>
-                          <Text>{amb.name}</Text>
+                          <Text style={{ color: 'black' }}>{amb.name}</Text>
                         </Separator>
                       </CollapseHeader>
                       <CollapseBody>
                         {
-                          this.listaDeTeste.map(function (item) {
+                          this.state.deviceDataList.map(function (item) {
                             return (
                               <ListItem >
-                                <View style={{ flexDirection: 'column' }}>
-                                  <Text>{item.ipdevice}</Text>
-
+                                <View style={{ flexDirection: 'row' }}>
+                                  <Icon style={{ marginLeft: 10 }}
+                                    name="pencil" size={20} color="#001321">
+                                  </Icon>
+                                  <Text style={{ marginHorizontal: 30 }}>{item.ipdevice}
+                                  </Text>
                                   <TextExtra item={item} />
 
                                 </View>
