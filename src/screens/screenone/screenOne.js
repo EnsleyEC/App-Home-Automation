@@ -27,6 +27,9 @@ import { Thumbnail, List, ListItem, Separator } from 'native-base';
 import TextExtra from '../../components/testExtra'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { openDatabase } from 'react-native-sqlite-storage';
+var db = openDatabase({ name: 'lumenx.db' });
+
 export default class ScreenOne extends Component {
 
   static environment = ''
@@ -39,10 +42,9 @@ export default class ScreenOne extends Component {
     this.table_envi = new EnvironmentDAO()
     this.table_envi.create_table()
 
-    var table_dev = new DeviceDAO()
-    table_dev.create_table()
-    // table_dev.register_device('Cel da Rafa', '111.111.111.111', 'OFF', this.props)
-    // table_dev.viewAllDevices()
+    this.table_dev = new DeviceDAO()
+    this.table_dev.create_table()
+
 
     this.multicastClient = null;
     this.arrayip = [];
@@ -53,7 +55,8 @@ export default class ScreenOne extends Component {
       arrayip: [],
       amb: [],
       spinner: true,
-      amb_name: ''
+      amb_name: '',
+      devices: []
     };
 
     this.changeName = this.changeName.bind(this);
@@ -82,7 +85,10 @@ export default class ScreenOne extends Component {
   componentWillMount() {
     this.startMulticast()
     this.table_envi.viewAllEnvironment(this)
+    this.state.devices = this.searchAllDevices()
+
     this.initTest()
+
 
     setTimeout(() => {
 
@@ -91,6 +97,15 @@ export default class ScreenOne extends Component {
         spinner: false
 
       });
+
+      this.state.amb.push({ id: 0, name: '*Sem ambiente*' })
+
+      this.state.amb.sort(this.dynamicSort("name"))
+
+      this.startMulticast()
+
+      this.forceUpdate()
+
 
     }, 4000);
   }
@@ -186,6 +201,7 @@ export default class ScreenOne extends Component {
 
   verify() {
     this.startMulticast()
+    this.searchAllDevices()
     this.forceUpdate()
   }
 
@@ -206,7 +222,12 @@ export default class ScreenOne extends Component {
     this.setState({ amb_name: op })
   }
 
-  noDevicesFoundMessage() {
+  removeDuplicatesTwo(myArr, prop) {
+    return myArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
+  }
+  DevicesFoundMessage() {
     Alert.alert(
       'Informação',
       'Nenhum dispositivo encontrado!',
@@ -221,6 +242,58 @@ export default class ScreenOne extends Component {
     );
   }
 
+  searchAllDevices() {
+
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM device', [], (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i) {
+          temp.push(results.rows.item(i));
+        }
+
+        this.state.devices = temp;
+
+      });
+    })
+
+  }
+
+  validate(devices) {
+
+    var resp = -1;
+
+    // verificando se alguem dos dados da lista estão no banco
+    for (i = 0; i < devices.length; i++) {
+
+      for (j = 0; j < this.state.devices.length; j++) {
+
+        if (devices[i].name == this.state.devices[j].mac) {
+          resp = 0;
+          break;
+        }
+
+      }
+      if (resp == -1) {
+        this.table_dev.register_device(devices[i].name, devices[i].name, devices[i].ipdevice, devices[i].value, '*Sem ambiente*', this.props)
+      }
+    }
+
+  }
+
+  changeIps() {
+
+    for (i = 0; i < this.state.deviceDataList.length; i++) {
+      for (j = 0; j < this.state.devices.length; j++) {
+        if (this.state.deviceDataList[i].name == this.state.devices[j].mac) {
+          this.state.devices[j].ip = this.state.deviceDataList[i].ipdevice;
+
+          break;
+        }
+      }
+    }
+
+  }
+
   render() {
     const { navigation } = this.props;
     const y = navigation.getParam('nameAmb');
@@ -230,20 +303,13 @@ export default class ScreenOne extends Component {
       this.state.amb = this.removeDuplicates(this.state.amb);
     }
 
-    /* 
-        // Ordenar a lista por ambiente
-        this.listaDeTeste.sort(this.dynamicSort("environment"))
-        this.newArray = this.listaDeTeste;
-    
-        // Verificando se é necessário fazer filtro
-        if (this.state.amb_name != 'Todos')
-          this.newArray = this.listaDeTeste.filter(device => device.environment == this.state.amb_name)
-    
-        // Se a lista de devices estiver vazia, nenhum dispostivo foi encontrado!
-        if (this.newArray.length == 0 && this.state.spinner == false)
-          this.noDevicesFoundMessage() */
+    const newList = this.removeDuplicatesTwo(this.state.deviceDataList, "name")
+    this.state.deviceDataList = newList;
 
-    this.removeDuplicates(this.state.deviceDataList)
+    // verifica quem está novo na rede e salva no banco sem ambiente
+    this.validate(this.state.deviceDataList)
+
+    this.changeIps()
 
     return (
 
@@ -255,33 +321,33 @@ export default class ScreenOne extends Component {
             <Container style={{
               backgroundColor: '#002540', flexDirection: 'row', alignItems: 'center', height: 30
             }}>
-              {/*   <Icon style={{width:10, height:10}}
-                  source={require('../../img/logo-tok.png')} />
-          */}
+
 
               <IconTwo style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+              <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
+                source={require('../../img/logo.png')} />
 
-              <IconTwo style={{ marginLeft: 290, color: 'white' }} name="refresh" onPress={() => this.verify()} />
+              <IconTwo style={{ marginLeft: 5, color: 'white' }} name="refresh" onPress={() => this.verify()} />
 
             </Container>
 
             <View style={{ alignItems: 'center' }}>
               {/* <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#00008B', marginVertical: 10 }}>Selecione o ambiente: </Text> */}
-              {/*          <Picker
+              <Picker
                 mode="dropdown"
                 style={{ marginTop: 15, color: '#00008B', backgroundColor: '#DCDCDC', width: 170 }}
                 selectedValue={this.state.amb_name}
                 onValueChange={(itemValue, itemIndex) => { this.updatePicker(itemValue) }}
               >
-                <Picker.item label='Todos' value='Todos' />
+                <Picker.item key='id' label='Todos' value='Todos' />
                 {this.state.amb.map((item) => {
                   return (
-                    <Picker.Item label={item.name} value={item.name} />
+                    <Picker.Item key={item.id} label={item.name} value={item.name} />
                   )
                 })
 
                 }
-              </Picker> */}
+              </Picker>
             </View>
 
             <View style={{ flex: 6 }}>
@@ -292,42 +358,122 @@ export default class ScreenOne extends Component {
 
               <View style={{ backgroundColor: '#001B2E', height: 6 }} />
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <ScrollView>
 
                 {this.state.amb.map((amb) => {
                   return (
-                    <Collapse key={amb.name}>
-                      <CollapseHeader>
-                        <Separator bordered>
-                          <Text style={{ color: 'black' }}>{amb.name}</Text>
-                        </Separator>
-                      </CollapseHeader>
-                      <CollapseBody>
-                        {
-                          this.state.deviceDataList.map(function (item) {
-                            return (
-                              <ListItem >
-                                <View style={{ flexDirection: 'row' }}>
-                                  <Icon style={{ marginLeft: 10 }}
-                                    name="pencil" size={20} color="#001321">
-                                  </Icon>
-                                  <Text style={{ marginHorizontal: 30 }}>{item.ipdevice}
-                                  </Text>
-                                  <TextExtra item={item} />
 
+                    <View>
+                      {this.state.amb_name == 'Todos' ? (
+                        <Collapse key={amb.name}>
+                          <CollapseHeader>
+                            <Separator bordered>
+                              <Text style={{ color: 'black' }}>{amb.name}</Text>
+                            </Separator>
+                          </CollapseHeader>
+                          <CollapseBody>
+                            {this.state.devices.map(function (item) {
+                              return (
+                                <View>
+                                  {amb.name == item.amb ? (
+
+
+                                    <ListItem >
+                                      <View style={{ flexDirection: 'row' }}>
+                                        <Icon style={{ marginLeft: 10 }}
+                                          name="pencil" size={20} color="#001321">
+                                        </Icon>
+                                        <Text style={{ marginHorizontal: 30 }}>{item.ip}
+                                        </Text>
+                                        <TextExtra item={item} />
+
+                                      </View>
+
+                                    </ListItem>
+                                  ) : null}
                                 </View>
+                              )
+                            })
+                            }
 
-                              </ListItem>
-                            )
-                          })
-                        }
+                          </CollapseBody>
 
-                      </CollapseBody>
+                        </Collapse>
+                      ) : (
+                          <View>
+                            {this.state.amb_name == amb.name && (
+                              <Collapse key={amb.name}>
+                                <CollapseHeader>
+                                  <Separator bordered>
+                                    <Text style={{ color: 'black' }}>{amb.name}</Text>
+                                  </Separator>
+                                </CollapseHeader>
+                                <CollapseBody>
+                                  {this.state.devices.map(function (item) {
+                                    return (
+                                      <View>
+                                        {amb.name == item.amb ? (
 
-                    </Collapse>
+
+                                          <ListItem >
+                                            <View style={{ flexDirection: 'row' }}>
+                                              <Icon style={{ marginLeft: 10 }}
+                                                name="pencil" size={20} color="#001321">
+                                              </Icon>
+                                              <Text style={{ marginHorizontal: 30 }}>{item.ip}
+                                              </Text>
+                                              <TextExtra item={item} />
+
+                                            </View>
+
+                                          </ListItem>
+                                        ) : null}
+                                      </View>
+                                    )
+                                  })
+                                  }
+
+                                </CollapseBody>
+
+                              </Collapse>
+                            )}
+                          </View>)}
+
+                    </View>
                   )
                 })}
               </ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             </View>
 

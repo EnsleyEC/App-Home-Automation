@@ -19,7 +19,7 @@ export default class TestExtra extends Component {
     }
 
     componentWillMount() {
-        this.setState({ value: this.props.item.value, ip: this.props.item.ipdevice });
+        this.setState({ value: this.props.item.value, ip: this.props.item.ip });
     }
 
     changeName() {
@@ -35,7 +35,6 @@ export default class TestExtra extends Component {
             value = 'ON';
         }
 
-        
         axios.get(`http://${this.state.ip}/deviceValue?value=${value}`)
             .then(() => {
                 console.log('Chegou a resposta.')

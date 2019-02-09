@@ -28,7 +28,7 @@ export default class DeviceDAO extends Component {
                     if (res.rows.length == 0) {
                         txn.executeSql('DROP TABLE IF EXISTS device', []);
                         txn.executeSql(
-                            'CREATE TABLE IF NOT EXISTS device(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50), ip VARCHAR(20), state VARCHAR(5), environment varchar(30))',
+                            'CREATE TABLE IF NOT EXISTS device(mac VARCHAR(50) NOT NULL PRIMARY KEY, name VARCHAR(50), ip VARCHAR(30), value VARCHAR(5), amb varchar(30))',
                             []
                         );
 
@@ -41,12 +41,14 @@ export default class DeviceDAO extends Component {
         });
     }
 
-    register_device = (dev_name, dev_ip, dev_state, dev_environment, nav) => {
+    // mac, name, ip, value, amb
+
+    register_device = (dev_mac, dev_name, dev_ip, dev_value, dev_amb, nav) => {
 
         db.transaction(function (tx) {
             tx.executeSql(
-                'INSERT INTO device(name, ip, state, environment) VALUES (?,?,?,?)',
-                [dev_name, dev_ip, dev_state, dev_environment],
+                'INSERT INTO device(mac,name, ip, value,amb) VALUES (?,?,?,?,?)',
+                [dev_mac, dev_name, dev_ip, dev_value, dev_amb],
                 (tx, results) => {
                     console.log('Results', results.rowsAffected);
                     if (results.rowsAffected > 0) {
@@ -78,9 +80,25 @@ export default class DeviceDAO extends Component {
                 var temp = [];
                 for (let i = 0; i < results.rows.length; ++i) {
                     temp.push(results.rows.item(i));
-                    // mostrando os ambientes na tela
-                    alert(results.rows.item(i).name)
                 }
+
+                return temp;
+                
+            });
+        })
+
+    }
+
+    searchDeviceForMac = (dev_mac) => {
+
+        db.transaction(tx => {
+            tx.executeSql('SELECT * FROM device where mac = ?', [dev_mac], (tx, results) => {
+                var temp = [];
+                for (let i = 0; i < results.rows.length; ++i) {
+                    temp.push(results.rows.item(i));
+                }
+
+                return temp;
             });
         })
 
