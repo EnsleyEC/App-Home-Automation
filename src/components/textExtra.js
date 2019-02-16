@@ -5,6 +5,7 @@ import {
     View
 } from 'react-native';
 import axios from 'axios';
+import { Switch } from 'native-base';
 
 
 export default class TestExtra extends Component {
@@ -13,7 +14,7 @@ export default class TestExtra extends Component {
         super(props)
 
         this.state = {
-            ip:'',
+            ip: '',
             value: ''
         }
     }
@@ -28,7 +29,7 @@ export default class TestExtra extends Component {
         if (this.state.value == "ON") {
             this.state.value = "OFF"
             value = 'OFF';
-           
+
         }
         else {
             this.state.value = "ON"

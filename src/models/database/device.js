@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Alert } from 'react-native'
-var db = openDatabase({ name: 'lumenx.db' });
+var db;
 
 export default class DeviceDAO extends Component {
 
@@ -14,6 +14,8 @@ export default class DeviceDAO extends Component {
             device_state: '',
             device_enviroment: ''
         };
+
+        db = openDatabase({ name: 'lumenx.db' });
     }
 
     create_table = () => {
@@ -43,29 +45,21 @@ export default class DeviceDAO extends Component {
 
     // mac, name, ip, value, amb
 
-    register_device = (dev_mac, dev_name, dev_ip, dev_value, dev_amb, nav) => {
+    register_device = (newDevice,environment, nav) => {
 
+        //alert('MAC = '+newDevice.mac+', Name = '+newDevice.name)
+        
         db.transaction(function (tx) {
             tx.executeSql(
                 'INSERT INTO device(mac,name, ip, value,amb) VALUES (?,?,?,?,?)',
-                [dev_mac, dev_name, dev_ip, dev_value, dev_amb],
+                [newDevice.name, newDevice.name, newDevice.ip, newDevice.value, environment],
                 (tx, results) => {
                     console.log('Results', results.rowsAffected);
+                    
                     if (results.rowsAffected > 0) {
-                        Alert.alert(
-                            'Informação',
-                            'Device salvo com sucesso!',
-                            [
-                                {
-                                    text: 'Ok',
-                                    onPress: () =>
-                                        nav.navigation.goBack(),
-                                },
-                            ],
-                            { cancelable: false }
-                        );
+                        console.log('Device salvo no banco com sucesso!')
                     } else {
-                        alert('Erro ao salvar o ambiente!');
+                        console.log('Erro ao salvar o device no banco!')
                     }
                 }
             );

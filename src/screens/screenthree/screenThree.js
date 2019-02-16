@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight } from 'react-native';
+import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight,Image } from 'react-native';
 import EnvironmentDAO from '../../models/database/environment'
 import { Text as TextBase, Icon, Container } from 'native-base'
 import Environment from '../../components/environment'
@@ -96,22 +96,15 @@ export default class ScreenThree extends Component {
         return (
             <View style={styles.container}>
                 <Container style={{
-                    backgroundColor: '#00008B', flexDirection: 'row', alignItems: 'center', height: 30
-
+                    backgroundColor: '#001B2E', flexDirection: 'row', alignItems: 'center', height: 30
+                    
                 }}>
-                    {/* // <TextBase style={{marginLeft:115, color:'white',fontWeight:'bold',fontSize:40}}>Lumenx</TextBase> */}
+                <Image style={{ width: 80, height: 30, marginHorizontal: 130 }}
+                source={require('../../img/logo.png')} />
                 </Container>
 
-                <View style={{ alignItems: 'center', marginTop: 15 }}>
-                    <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Ambientes já cadastrados:</Text>
-                    {
-                        <Environment />
-                    }
-
-                </View>
-
                 <View style={styles.containerBody}>
-                    <Text style={styles.txtTittle}>Gerenciando ambientes</Text>
+                    <Text style={styles.txtTittle}>Gerenciando Ambientes</Text>
                     <TextInput
                         placeholder="Digite o nome do ambiente.."
                         style={styles.txtInput}
@@ -144,6 +137,15 @@ export default class ScreenThree extends Component {
                     </View>
 
                 </View>
+                <View style={{ flex: 2,alignItems: 'center', marginBottom:15 }}>
+                
+                    <Text style={{fontSize: 20 , fontWeight: 'bold', color: '#001B2E'}}>Ambientes cadastrados:</Text>
+                    {
+                        <Environment />
+                    }
+
+                </View>
+
             </View>
         );
     }
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     containerBody: {
-        flex: 8,
+        flex: 4,
         alignItems: 'center',
         backgroundColor: '#fff',
         justifyContent: 'center'
@@ -166,7 +168,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         fontWeight: 'bold',
-        color: 'black'
+        color: '#001B2E',
+       
     },
     txtInput: {
         margin: 40,
@@ -176,19 +179,17 @@ const styles = StyleSheet.create({
     },
     txtBtn: {
         fontSize: 22,
-        backgroundColor: '#DCDCDC',
+        backgroundColor: '#545D70',
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight: 'bold',
-        color: 'black'
+        color: '#fff'
     },
     btn: {
         margin: 10,
-        backgroundColor: '#DCDCDC',
+        backgroundColor: '#545D70',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight: 'bold',
-        color: 'black'
+        color: '#fff'
     }
 });

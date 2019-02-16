@@ -23,12 +23,12 @@ import DeviceDAO from '../../models/database/device'
 import DeviceItems from '../../components/devices';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
-import { Thumbnail, List, ListItem, Separator } from 'native-base';
-import TextExtra from '../../components/testExtra'
+import { Right, Left, ListItem, Separator } from 'native-base';
+import TextExtra from '../../components/textExtra'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'lumenx.db' });
+import EditableText from '../../components/editable';
+var db;
 
 export default class ScreenOne extends Component {
 
@@ -38,13 +38,14 @@ export default class ScreenOne extends Component {
 
     super(props);
 
+    db = openDatabase({ name: 'lumenx.db' });
+
     // verificando a criação do banco e tabelas
     this.table_envi = new EnvironmentDAO()
     this.table_envi.create_table()
 
     this.table_dev = new DeviceDAO()
     this.table_dev.create_table()
-
 
     this.multicastClient = null;
     this.arrayip = [];
@@ -78,8 +79,6 @@ export default class ScreenOne extends Component {
     this.listaDeTeste.push(ob)
     this.listaDeTeste.push(ob2)
 
-
-
   }
 
   componentWillMount() {
@@ -94,11 +93,12 @@ export default class ScreenOne extends Component {
 
       this.setState({
         amb_name: 'Todos',
-        spinner: false
+        spinner: false,
+        color: '#001B2E'
 
       });
 
-      this.state.amb.push({ id: 0, name: '*Sem ambiente*' })
+      this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
 
       this.state.amb.sort(this.dynamicSort("name"))
 
@@ -258,23 +258,35 @@ export default class ScreenOne extends Component {
 
   }
 
-  validate(devices) {
+  validate() {
 
     var resp = -1;
 
+    var devicesDaRede = this.state.deviceDataList;
+
+    if (this.state.devices == undefined) {
+      this.state.devices = []
+    }
+
+    var qtd_devices_rede = devicesDaRede.length;
+    var qtd_devices_bd = this.state.devices.length;
+
+    console.log('BD = ' + qtd_devices_bd + ', Rede = ' + qtd_devices_rede)
+
     // verificando se alguem dos dados da lista estão no banco
-    for (i = 0; i < devices.length; i++) {
+    for (i = 0; i < devicesDaRede.length; i++) {
 
       for (j = 0; j < this.state.devices.length; j++) {
 
-        if (devices[i].name == this.state.devices[j].mac) {
+        //alert('Name = '+devicesDaRede[i].name+', MAC = '+this.state.devices[j].mac)
+        if (devicesDaRede[i].name == this.state.devices[j].mac) {
           resp = 0;
           break;
         }
 
       }
       if (resp == -1) {
-        this.table_dev.register_device(devices[i].name, devices[i].name, devices[i].ipdevice, devices[i].value, '*Sem ambiente*', this.props)
+        this.table_dev.register_device(devicesDaRede[i], '*Novos dispositivos*', this.props)
       }
     }
 
@@ -295,19 +307,12 @@ export default class ScreenOne extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
-    const y = navigation.getParam('nameAmb');
-    console.log("Y", y)
-    if (y != undefined) {
-      this.state.amb.push(y);
-      this.state.amb = this.removeDuplicates(this.state.amb);
-    }
 
     const newList = this.removeDuplicatesTwo(this.state.deviceDataList, "name")
     this.state.deviceDataList = newList;
 
     // verifica quem está novo na rede e salva no banco sem ambiente
-    this.validate(this.state.deviceDataList)
+    this.validate()
 
     this.changeIps()
 
@@ -319,15 +324,22 @@ export default class ScreenOne extends Component {
 
           <View style={{ flex: 1 }} >
             <Container style={{
-              backgroundColor: '#002540', flexDirection: 'row', alignItems: 'center', height: 30
+              backgroundColor: '#002540', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 30
             }}>
 
+              <Left>
+                <IconTwo style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+              </Left>
 
-              <IconTwo style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
               <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
                 source={require('../../img/logo.png')} />
 
-              <IconTwo style={{ marginLeft: 5, color: 'white' }} name="refresh" onPress={() => this.verify()} />
+              <Right>
+                <IconTwo style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
+              </Right>
+
+
+
 
             </Container>
 
@@ -335,7 +347,7 @@ export default class ScreenOne extends Component {
               {/* <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#00008B', marginVertical: 10 }}>Selecione o ambiente: </Text> */}
               <Picker
                 mode="dropdown"
-                style={{ marginTop: 15, color: '#00008B', backgroundColor: '#DCDCDC', width: 170 }}
+                style={{ marginTop: 15, color: 'fff', backgroundColor: '#545D70', width: 170 }}
                 selectedValue={this.state.amb_name}
                 onValueChange={(itemValue, itemIndex) => { this.updatePicker(itemValue) }}
               >
@@ -358,21 +370,6 @@ export default class ScreenOne extends Component {
 
               <View style={{ backgroundColor: '#001B2E', height: 6 }} />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               <ScrollView>
 
                 {this.state.amb.map((amb) => {
@@ -382,8 +379,16 @@ export default class ScreenOne extends Component {
                       {this.state.amb_name == 'Todos' ? (
                         <Collapse key={amb.name}>
                           <CollapseHeader>
-                            <Separator bordered>
-                              <Text style={{ color: 'black' }}>{amb.name}</Text>
+                            <Separator bordered >
+                              <View style={{ flexDirection: 'row' }}>
+                                <Text style={{ color: 'black' }}>{amb.name}</Text>
+                                <Right>
+                                  <Icon style={{ marginRight:30 }}
+                                    name="angle-up" size={20} color="#001321">
+                                  </Icon>
+                                </Right>
+
+                              </View>
                             </Separator>
                           </CollapseHeader>
                           <CollapseBody>
@@ -398,10 +403,13 @@ export default class ScreenOne extends Component {
                                         <Icon style={{ marginLeft: 10 }}
                                           name="pencil" size={20} color="#001321">
                                         </Icon>
-                                        <Text style={{ marginHorizontal: 30 }}>{item.ip}
-                                        </Text>
+                                        {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                        {/* </Text> */}
+                                        <EditableText style={{ marginHorizontal: 30 }} item={item} />
                                         <TextExtra item={item} />
-
+                                        <Icon style={{ marginLeft: 30 }}
+                                          name="plus-square-o" size={25} color="#001321">
+                                        </Icon>
                                       </View>
 
                                     </ListItem>
@@ -438,7 +446,9 @@ export default class ScreenOne extends Component {
                                               <Text style={{ marginHorizontal: 30 }}>{item.ip}
                                               </Text>
                                               <TextExtra item={item} />
-
+                                              <Icon style={{ marginLeft: 10 }}
+                                                name="circle-with-plus" size={20} color="#001321">
+                                              </Icon>
                                             </View>
 
                                           </ListItem>
@@ -507,11 +517,11 @@ export default class ScreenOne extends Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#A9A9A9',
+    backgroundColor: '#fff',
   },
   second: {
     flex: 1,
-    backgroundColor: '#A9A9A9',
+    backgroundColor: '#fff',
   },
   btn: {
     height: 40,

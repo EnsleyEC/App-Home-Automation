@@ -24,7 +24,7 @@ export const sendMessage = (msg) => {
 
 
 export const getData = () => {
-  // this.setState({ deviceDataList: [] });
+
   for (var i = 0; i < this.amountIp; i++) {
     axios.get(`http://${this.state.arrayip[i]}/deviceData`)
     .then(response => {

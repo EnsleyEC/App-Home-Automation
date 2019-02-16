@@ -39,20 +39,7 @@ export default class DeviceItems extends Component {
                             onPress={() => this.verify()}>
                             <Text style={this.props.item.value == "ON" ? {color:'green', fontWeight:'bold'} : {color:'red',fontWeight:'bold'}} >{this.props.item.value}</Text>
                         </TouchableHighlight>
-                        {/*  <Button style={{ width: 10, height: 15 }}
-                            onPress={() => this.onStateChange(this.props.item.ipdevice, 'ON')}
-                            title="ON"
-                            color={this.props.item.value == "ON" ? "#C71585" : "gray"}
-                            accessibilityLabel="Learn more about this purple button"
-                        />
-                        <Button style={{ width: 10, height: 25 }}
-                            onPress={() => this.onStateChange(this.props.item.ipdevice, 'OFF')}
-                            title="OFF"
-                            color="#00008B"
-                            accessibilityLabel="Learn more about this purple button"
-                        />
- */}
-
+ 
                     </View>
 
 

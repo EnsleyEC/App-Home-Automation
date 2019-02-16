@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "accordion-collapse-react-native": "^0.1.9",
+    "alpha-editable-text-react-native": "^0.1.4",
     "axios": "^0.18.0",
     "native-base": "^2.10.0",
     "node-uuid": "^1.4.8",

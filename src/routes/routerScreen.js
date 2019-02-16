@@ -28,7 +28,6 @@ const CustomDrawerComponent = (props) => (
 
 const App = createDrawerNavigator({
     FirstScreen: ScreenOne,
-    SecondScreen: ScreenTwo,
     ThirdScreen: ScreenThree,
     FourthScreen: ScreenFour
 },
