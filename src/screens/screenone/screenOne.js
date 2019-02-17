@@ -28,7 +28,33 @@ import TextExtra from '../../components/textExtra'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { openDatabase } from 'react-native-sqlite-storage';
 import EditableText from '../../components/editable';
+import EditablePlus from '../../components/editablePlus'
+
+import DialogInput from 'react-native-dialog-input';
+
 var db;
+var table_envi;
+var table_dev;
+var ambientes;
+var nome_amb = "Todos";
+
+function verifyEnvironment(deviceMac, deviceAmb) {
+
+  achou = false
+
+  for (i = 0; i < ambientes.length; i++) {
+    if (ambientes[i].name == deviceAmb) {
+      achou = true
+      table_dev.updateAmbDevice(deviceAmb, deviceMac)
+      break;
+    }
+  }
+
+  if (achou == false) {
+    alert('Ambiente inválido!')
+  }
+}
+
 
 export default class ScreenOne extends Component {
 
@@ -41,11 +67,11 @@ export default class ScreenOne extends Component {
     db = openDatabase({ name: 'lumenx.db' });
 
     // verificando a criação do banco e tabelas
-    this.table_envi = new EnvironmentDAO()
-    this.table_envi.create_table()
+    table_envi = new EnvironmentDAO()
+    table_envi.create_table()
 
-    this.table_dev = new DeviceDAO()
-    this.table_dev.create_table()
+    table_dev = new DeviceDAO()
+    table_dev.create_table()
 
     this.multicastClient = null;
     this.arrayip = [];
@@ -83,7 +109,7 @@ export default class ScreenOne extends Component {
 
   componentWillMount() {
     this.startMulticast()
-    this.table_envi.viewAllEnvironment(this)
+    table_envi.viewAllEnvironment(this)
     this.state.devices = this.searchAllDevices()
 
     this.initTest()
@@ -101,6 +127,8 @@ export default class ScreenOne extends Component {
       this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
 
       this.state.amb.sort(this.dynamicSort("name"))
+
+      ambientes = this.state.amb;
 
       this.startMulticast()
 
@@ -306,6 +334,8 @@ export default class ScreenOne extends Component {
 
   }
 
+
+
   render() {
 
     const newList = this.removeDuplicatesTwo(this.state.deviceDataList, "name")
@@ -383,7 +413,7 @@ export default class ScreenOne extends Component {
                               <View style={{ flexDirection: 'row' }}>
                                 <Text style={{ color: 'black' }}>{amb.name}</Text>
                                 <Right>
-                                  <Icon style={{ marginRight:30 }}
+                                  <Icon style={{ marginRight: 30 }}
                                     name="angle-up" size={20} color="#001321">
                                   </Icon>
                                 </Right>
@@ -401,15 +431,13 @@ export default class ScreenOne extends Component {
                                     <ListItem >
                                       <View style={{ flexDirection: 'row' }}>
                                         <Icon style={{ marginLeft: 10 }}
-                                          name="pencil" size={20} color="#001321">
+                                          name="asterisk" size={20} color="#001321">
                                         </Icon>
                                         {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
                                         {/* </Text> */}
                                         <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                        <TextExtra item={item} />
-                                        <Icon style={{ marginLeft: 30 }}
-                                          name="plus-square-o" size={25} color="#001321">
-                                        </Icon>
+                                        <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                        <EditablePlus item={item} ambientes={ambientes}/>
                                       </View>
 
                                     </ListItem>
@@ -441,13 +469,14 @@ export default class ScreenOne extends Component {
                                           <ListItem >
                                             <View style={{ flexDirection: 'row' }}>
                                               <Icon style={{ marginLeft: 10 }}
-                                                name="pencil" size={20} color="#001321">
+                                                name="asterisk" size={20} color="#001321">
                                               </Icon>
                                               <Text style={{ marginHorizontal: 30 }}>{item.ip}
                                               </Text>
                                               <TextExtra item={item} />
-                                              <Icon style={{ marginLeft: 10 }}
-                                                name="circle-with-plus" size={20} color="#001321">
+                                              <Icon style={{ marginLeft: 30 }}
+                                                name="plus-square-o" size={25} color="#001321"
+                                                onPress={() => alert(item.amb)}>
                                               </Icon>
                                             </View>
 

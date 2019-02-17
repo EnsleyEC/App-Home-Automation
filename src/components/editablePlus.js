@@ -2,9 +2,11 @@ import React from 'react';
 
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import DeviceDAO from '../models/database/device'
 
-export default class EditableText extends React.Component {
+export default class EditablePlus extends React.Component {
 
     constructor(props) {
 
@@ -28,13 +30,26 @@ export default class EditableText extends React.Component {
 
     }
 
-    atualizarDeviceNoBD() {
+    atualizarAmbNoBD() {
+        var ambientes = this.props.ambientes;
+        var achou = false;
+
         this.dbDevice = new DeviceDAO()
-        if (this.state.name.length >= 3){
-            this.dbDevice.updateNameDevice(this.state.name,this.props.item.mac,this)
+
+
+        for(i=0; i<ambientes.length; i++)
+        {
+            console.log('Name = '+this.state.name+', Name2 = '+ambientes[i].name)
+            if(this.state.name == ambientes[i].name)
+            {
+                achou = true;
+                this.dbDevice.updateAmbDevice(this.state.name, this.props.item.mac, this)
+                break;
+            }
         }
-        else
-            alert('Nome do dispositivo muito pequeno! Mínimo 3 caracteres.')
+        
+        if(achou == false)
+            alert('Nome do ambiente inválido!')
     }
 
     render() {
@@ -67,7 +82,7 @@ export default class EditableText extends React.Component {
 
                             }}
 
-                            onSubmitEditing={() => this.atualizarDeviceNoBD()}
+                            onSubmitEditing={() => this.atualizarAmbNoBD()}
 
                             onBlur={() => {
 
@@ -88,11 +103,9 @@ export default class EditableText extends React.Component {
                             width={150}
                             numberOfLines={this.props.numberOfLines}
 
-                        /> : <Text
-
-                            style={{ fontSize: this.props.fontSize, color: this.props.color, width: this.props.width, textAlign: this.props.textAlign }}
-
-                        >{this.props.item.name}</Text>
+                        /> : <Icon
+                            name="plus-square-o" size={25} color="#001321">
+                            </Icon>
 
                     }
 

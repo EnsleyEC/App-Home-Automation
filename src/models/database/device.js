@@ -98,5 +98,65 @@ export default class DeviceDAO extends Component {
 
     }
 
+    updateAmbDevice = (newAmbDevice, device_mac, nav) => {
+
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'UPDATE device set amb = ? where mac = ?',
+                [newAmbDevice, device_mac],
+                (tx, results) => {
+                    console.log('Results', results.rowsAffected);
+                    if (results.rowsAffected > 0) {
+                        Alert.alert(
+                            'Informação',
+                            'Ambiente do dispositivo atualizado com sucesso!',
+                            [
+                                {
+                                    text: 'Ok',
+                                    onPress: () => console.log('Ambiente do device atualizado com sucesso!'),
+                                },
+                            ],
+                            { cancelable: false }
+                        );
+                    } else {
+                        alert('Erro ao atualizar o ambiente do dispositivo!');
+                    }
+                }
+            );
+        });
+
+    }
+
+    updateNameDevice = (newNameDevice, device_mac) => {
+
+        console.log('Nome = '+newNameDevice+', MAC = '+device_mac)
+
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'UPDATE device set name = ? where mac = ?',
+                [newNameDevice, device_mac],
+                (tx, results) => {
+                    console.log('Results', results.rowsAffected);
+                    if (results.rowsAffected > 0) {
+                        Alert.alert(
+                            'Informação',
+                            'Nome do dispositivo atualizado com sucesso! Atualize a tela.',
+                            [
+                                {
+                                    text: 'Ok',
+                                    onPress: () => console.log('Nome atualizado do device!'),
+                                },
+                            ],
+                            { cancelable: false }
+                        );
+                      
+                    } else {
+                        alert('Erro ao atualizar o ambiente do dispositivo!');
+                    }
+                }
+            );
+        });
+
+    }
 
 }
