@@ -20,7 +20,6 @@ import {
 // database
 import EnvironmentDAO from '../../models/database/environment'
 import DeviceDAO from '../../models/database/device'
-import DeviceItems from '../../components/devices';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import { Right, Left, ListItem, Separator } from 'native-base';
@@ -30,7 +29,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 import EditableText from '../../components/editable';
 import EditablePlus from '../../components/editablePlus'
 
-import DialogInput from 'react-native-dialog-input';
+import { SearchBar } from 'react-native-elements';
 
 var db;
 var table_envi;
@@ -83,7 +82,8 @@ export default class ScreenOne extends Component {
       amb: [],
       spinner: true,
       amb_name: '',
-      devices: []
+      devices: [],
+      search: ''
     };
 
     this.changeName = this.changeName.bind(this);
@@ -314,7 +314,7 @@ export default class ScreenOne extends Component {
 
       }
       if (resp == -1) {
-        this.table_dev.register_device(devicesDaRede[i], '*Novos dispositivos*', this.props)
+        table_dev.register_device(devicesDaRede[i], '*Novos dispositivos*', this.props)
       }
     }
 
@@ -334,9 +334,24 @@ export default class ScreenOne extends Component {
 
   }
 
+//AntiDeign
+// checkcicleo
 
+// Entypo
+// wifi,cog, light-bulb, signal, trash
+
+// EnvilIcons
+// check, gear
+
+//Feather
+//  bell, settings,wifi, help-circle
+
+//Fontawesome
+// home, bell, lightbulb-o, bell-o, question-circle-o
 
   render() {
+
+    const { search } = this.state;
 
     const newList = this.removeDuplicatesTwo(this.state.deviceDataList, "name")
     this.state.deviceDataList = newList;
@@ -345,6 +360,8 @@ export default class ScreenOne extends Component {
     this.validate()
 
     this.changeIps()
+
+    
 
     return (
 
@@ -374,7 +391,7 @@ export default class ScreenOne extends Component {
             </Container>
 
             <View style={{ alignItems: 'center' }}>
-              {/* <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#00008B', marginVertical: 10 }}>Selecione o ambiente: </Text> */}
+      
               <Picker
                 mode="dropdown"
                 style={{ marginTop: 15, color: 'fff', backgroundColor: '#545D70', width: 170 }}
@@ -392,11 +409,7 @@ export default class ScreenOne extends Component {
               </Picker>
             </View>
 
-            <View style={{ flex: 6 }}>
-
-              <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#001B2E' }}>Ambientes</Text>
-              </View>
+            <View style={{ flex: 6, marginTop:15 }}>
 
               <View style={{ backgroundColor: '#001B2E', height: 6 }} />
 

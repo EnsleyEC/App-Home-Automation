@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight,Image } from 'react-native';
+import { Alert, StyleSheet, Text, View, TextInput, TouchableHighlight, Image } from 'react-native';
 import EnvironmentDAO from '../../models/database/environment'
-import { Text as TextBase, Icon, Container } from 'native-base'
+import { Text as TextBase, Container, Left } from 'native-base'
 import Environment from '../../components/environment'
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 var database = new EnvironmentDAO()
 
 export default class ScreenThree extends Component {
@@ -97,49 +99,44 @@ export default class ScreenThree extends Component {
             <View style={styles.container}>
                 <Container style={{
                     backgroundColor: '#001B2E', flexDirection: 'row', alignItems: 'center', height: 30
-                    
+
                 }}>
-                <Image style={{ width: 80, height: 30, marginHorizontal: 130 }}
-                source={require('../../img/logo.png')} />
+
+                    <Left style={{ marginLeft: 10 }}>
+                        <TouchableHighlight onPress={()=>this.props.navigation.goBack()}>
+                            <Image style={{ width: 30, height: 30 }}
+                                source={require('../../img/left.png')
+                                } />
+                        </TouchableHighlight>
+
+
+                    </Left>
                 </Container>
 
                 <View style={styles.containerBody}>
-                    <Text style={styles.txtTittle}>Gerenciando Ambientes</Text>
-                    <TextInput
-                        placeholder="Digite o nome do ambiente.."
-                        style={styles.txtInput}
-                        maxLength={20}
-                        onChangeText={(typedText) => this.setState({ nameAmb: typedText })}
-                    />
+                    <Text style={styles.txtTittle}>Novo ambiente</Text>
 
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <TextInput
+                            placeholder="Digite o nome..."
+                            style={styles.txtInput}
+                            maxLength={20}
+                            onChangeText={(typedText) => this.setState({ nameAmb: typedText })}
+                        />
 
-                        <TouchableHighlight
-                            style={styles.btn}
-                            onPress={() => this._confirmCreateMessage(this.state.nameAmb)}>
-                            <Text style={styles.txtBtn}>Criar</Text>
+                        <Icon
+                            name="plus-square-o" size={20} color="#001321" onPress={() => this._confirmCreateMessage(this.state.nameAmb)}>
+                        </Icon>
 
-                        </TouchableHighlight>
-
-                        <TouchableHighlight
-                            style={styles.btn}
-                            onPress={() => this._confirmDeleteMessage(this.state.nameAmb)}>
-                            <Text style={styles.txtBtn}>Deletar</Text>
-
-                        </TouchableHighlight>
-
-                        <TouchableHighlight
-                            style={styles.btn}
-                            onPress={() => this.props.navigation.goBack()}
-                        >
-                            <Text style={styles.txtBtn}>Voltar</Text>
-                        </TouchableHighlight>
+                        <Icon style={{ marginLeft: 10 }}
+                            name="trash" size={20} color="#001321" onPress={() => this._confirmDeleteMessage(this.state.nameAmb)}>
+                        </Icon>
                     </View>
 
                 </View>
-                <View style={{ flex: 2,alignItems: 'center', marginBottom:15 }}>
-                
-                    <Text style={{fontSize: 20 , fontWeight: 'bold', color: '#001B2E'}}>Ambientes cadastrados:</Text>
+                <View style={{ flex: 2, alignItems: 'center', marginBottom: 15 }}>
+
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#001B2E' }}>Ambientes cadastrados:</Text>
                     {
                         <Environment />
                     }
@@ -150,6 +147,7 @@ export default class ScreenThree extends Component {
         );
     }
 }
+
 
 const styles = StyleSheet.create({
 
@@ -169,13 +167,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         fontWeight: 'bold',
         color: '#001B2E',
-       
+
     },
     txtInput: {
         margin: 40,
         padding: 10,
         fontSize: 18,
-        width: 300
+        width: 200
     },
     txtBtn: {
         fontSize: 22,

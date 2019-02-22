@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import { Container } from 'native-base'
 
 export default class ScreenFour extends Component {
@@ -14,24 +14,22 @@ export default class ScreenFour extends Component {
 
         return (
             <View style={styles.container}>
-                <Container style={{
-                    backgroundColor: '#00008B', flexDirection: 'row', alignItems: 'center', height: 30
-
-                }}>
-                    {/* // <TextBase style={{marginLeft:115, color:'white',fontWeight:'bold',fontSize:40}}>Lumenx</TextBase> */}
-                </Container>
-
-
-                <View style={{ flex: 6 }}>
-                    <Text>Informação..</Text>
-                </View>
-
-                <TouchableHighlight
-                    style={styles.btn}
-                    onPress={() => this.props.navigation.goBack()}
-                >
-                    <Text style={styles.txtBtn}>Voltar</Text>
-                </TouchableHighlight>
+           <View style={{flex: 1, justifyContent:'center', marginTop: 100}}>
+               <Text style={{color:'#fff', fontSize:30}}>Olá,</Text>
+               <Text style={{color:'#fff', fontSize:20}}>Seja bem vindo(a)!
+               </Text>
+           </View>
+           <View style={{flex:6, justifyContent:'center'}}>
+           <Image source={require('../../img/logo2.png')} />
+           </View>
+          
+                
+           <View style={styles.img}>
+              <Image style={{ width: 110, height: 40 }}
+                source={require('../../img/lumenx3.png')} />
+                <Text style={{color:'#fff', fontSize:16, marginBottom:5}}>www.lumenx.com.br</Text>
+                <Text style={{color:'#fff', fontSize:16, marginBottom:30}}>Tel: (35)3473-0235</Text>
+            </View>
 
             </View>
         );
@@ -42,24 +40,15 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#203864',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    txtBtn: {
-        fontSize: 22,
-        backgroundColor: '#DCDCDC',
+    img: {
+        flex: 0.8,
         justifyContent: 'center',
         alignItems: 'center',
-        fontWeight: 'bold',
-        color: 'black'
-    },
-    btn: {
-        margin: 20,
-        backgroundColor: '#DCDCDC',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontWeight: 'bold',
-        color: 'black'
-    }
+        marginBottom:25
+      }
 
 });
