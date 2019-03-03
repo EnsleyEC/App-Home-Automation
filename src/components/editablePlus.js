@@ -36,7 +36,6 @@ export default class EditablePlus extends React.Component {
 
         this.dbDevice = new DeviceDAO()
 
-
         for(i=0; i<ambientes.length; i++)
         {
             console.log('Name = '+this.state.name+', Name2 = '+ambientes[i].name)

@@ -28,7 +28,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { openDatabase } from 'react-native-sqlite-storage';
 import EditableText from '../../components/editable';
 import EditablePlus from '../../components/editablePlus'
-
 import { SearchBar } from 'react-native-elements';
 
 var db;
@@ -83,7 +82,9 @@ export default class ScreenOne extends Component {
       spinner: true,
       amb_name: '',
       devices: [],
-      search: ''
+      search: '',
+      showIcons: false,
+      digitando: false
     };
 
     this.changeName = this.changeName.bind(this);
@@ -107,6 +108,8 @@ export default class ScreenOne extends Component {
 
   }
 
+
+
   componentWillMount() {
     this.startMulticast()
     table_envi.viewAllEnvironment(this)
@@ -124,7 +127,7 @@ export default class ScreenOne extends Component {
 
       });
 
-      this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
+      //this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
 
       this.state.amb.sort(this.dynamicSort("name"))
 
@@ -135,7 +138,7 @@ export default class ScreenOne extends Component {
       this.forceUpdate()
 
 
-    }, 4000);
+    }, 2000);
   }
 
   componentWillReceiveProps() {
@@ -334,20 +337,89 @@ export default class ScreenOne extends Component {
 
   }
 
-//AntiDeign
-// checkcicleo
+  esconde() {
+    if (this.state.showIcons == false) {
+      this.setState({ showIcons: true })
+    }
+    else {
+      this.setState({ showIcons: false })
+    }
+  }
 
-// Entypo
-// wifi,cog, light-bulb, signal, trash
 
-// EnvilIcons
-// check, gear
+  updateSearch = search => {
+    this.setState({ search })
+    this.setState({ digitando: true })
+    //busca = this.state.search
+    this.forceUpdate()
 
-//Feather
-//  bell, settings,wifi, help-circle
+  }
 
-//Fontawesome
-// home, bell, lightbulb-o, bell-o, question-circle-o
+  ajudaSenhor() {
+    this.setState({ digitando: false })
+    this.forceUpdate()
+  }
+
+  deletarDispositivoDoBanco(ambName)
+  {
+    var ambientes = this.props.ambientes;
+    var achou = false;
+
+    this.dbDevice = new DeviceDAO()
+
+    for(i=0; i<ambientes.length; i++)
+    {
+        if(ambName == ambientes[i].name)
+        {
+            achou = true;
+            this.dbDevice.updateAmbDevice(ambName, this.props.item.mac, this)
+            break;
+        }
+    }
+    
+    if(achou == false)
+        alert('Nome do ambiente inválido!')
+  }
+
+  deletarDispositivo(ambName) {
+
+    Alert.alert(
+      'Informação',
+      'Deseja mesmo deletar o ambiente?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Errou'),
+          style: 'cancel',
+        },
+        { text: 'Sim', onPress: () => this.deletarDispositivoDoBanco(ambName) },
+      ],
+      { cancelable: false },
+    );
+  }
+  
+  atualizarAmbNoBD() {
+    var ambientes = this.props.ambientes;
+    var achou = false;
+
+    this.dbDevice = new DeviceDAO()
+
+
+    for(i=0; i<ambientes.length; i++)
+    {
+        console.log('Name = '+this.state.name+', Name2 = '+ambientes[i].name)
+        if(this.state.name == ambientes[i].name)
+        {
+            achou = true;
+            this.dbDevice.updateAmbDevice(this.state.name, this.props.item.mac, this)
+            break;
+        }
+    }
+    
+    if(achou == false)
+        alert('Nome do ambiente inválido!')
+}
+
 
   render() {
 
@@ -361,8 +433,6 @@ export default class ScreenOne extends Component {
 
     this.changeIps()
 
-    
-
     return (
 
 
@@ -375,7 +445,7 @@ export default class ScreenOne extends Component {
             }}>
 
               <Left>
-                <IconTwo style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.props.navigation.openDrawer()} />
+                <IconTwo style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.esconde()} />
               </Left>
 
               <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
@@ -390,11 +460,22 @@ export default class ScreenOne extends Component {
 
             </Container>
 
-            <View style={{ alignItems: 'center' }}>
-      
-              <Picker
+            <View>
+              {this.state.showIcons == true &&
+                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                  <Left style={{ marginLeft: 60 }}>
+                    <Icon style={{ color: '#203864' }} size={50} name="lightbulb-o" />
+                  </Left>
+                  <Icon style={{ color: '#203864' }} size={50} name="home" />
+                  <Right style={{ marginRight: 60 }}>
+                    <Icon style={{ color: '#203864' }} size={50} name="question-circle-o" />
+                  </Right>
+                </View>
+              }
+
+              {/*          <Picker
                 mode="dropdown"
-                style={{ marginTop: 15, color: 'fff', backgroundColor: '#545D70', width: 170 }}
+                style={{ marginTop: 15, color: 'fff', backgroundColor: '#fff', width: 170 }}
                 selectedValue={this.state.amb_name}
                 onValueChange={(itemValue, itemIndex) => { this.updatePicker(itemValue) }}
               >
@@ -406,28 +487,49 @@ export default class ScreenOne extends Component {
                 })
 
                 }
-              </Picker>
+              </Picker> */}
+
+
+
+
+
             </View>
 
-            <View style={{ flex: 6, marginTop:15 }}>
+            <SearchBar
+              placeholder="Digite..."
+              lightTheme
+              round
+              onChangeText={this.updateSearch}
+              value={search}
+              autoCorrect={false}
+              onClear={() => this.ajudaSenhor()}
+            //onCancel={()=>alert('oiiiiii')}
+            />
 
-              <View style={{ backgroundColor: '#001B2E', height: 6 }} />
+            <View style={{ flex: 6, marginTop: 15 }}>
+
+              <View style={{ backgroundColor: '#fff', height: 6 }} />
 
               <ScrollView>
 
                 {this.state.amb.map((amb) => {
+
                   return (
 
-                    <View>
-                      {this.state.amb_name == 'Todos' ? (
+                    <View >
+                      {this.state.digitando == false ? (
                         <Collapse key={amb.name}>
                           <CollapseHeader>
-                            <Separator bordered >
+                            <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
                               <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ color: 'black' }}>{amb.name}</Text>
+
+                                <Icon style={{ marginLeft: 15 }}
+                                  name="cog" size={20} color="#001321">
+                                </Icon>
+                                <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
                                 <Right>
                                   <Icon style={{ marginRight: 30 }}
-                                    name="angle-up" size={20} color="#001321">
+                                    name="angle-down" size={20} color="#001321">
                                   </Icon>
                                 </Right>
 
@@ -444,13 +546,16 @@ export default class ScreenOne extends Component {
                                     <ListItem >
                                       <View style={{ flexDirection: 'row' }}>
                                         <Icon style={{ marginLeft: 10 }}
-                                          name="asterisk" size={20} color="#001321">
+                                          name="trash" size={30} color="#001321" onPress={() => this.deletarDispositivo()}>
+                                        </Icon>
+                                        <Icon style={{ marginLeft: 30 }}
+                                          name="pencil" size={30} color="#001321">
                                         </Icon>
                                         {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
                                         {/* </Text> */}
                                         <EditableText style={{ marginHorizontal: 30 }} item={item} />
                                         <TextExtra style={{ marginHorizontal: 20 }} item={item} />
-                                        <EditablePlus item={item} ambientes={ambientes}/>
+                                        <EditablePlus item={item} ambientes={ambientes} />
                                       </View>
 
                                     </ListItem>
@@ -465,11 +570,23 @@ export default class ScreenOne extends Component {
                         </Collapse>
                       ) : (
                           <View>
-                            {this.state.amb_name == amb.name && (
+                            {this.state.search == amb.name && (
                               <Collapse key={amb.name}>
                                 <CollapseHeader>
-                                  <Separator bordered>
-                                    <Text style={{ color: 'black' }}>{amb.name}</Text>
+                                  <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
+                                    <View style={{ flexDirection: 'row' }}>
+
+                                      <Icon style={{ marginLeft: 15 }}
+                                        name="cog" size={20} color="#001321">
+                                      </Icon>
+                                      <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                                      <Right>
+                                        <Icon style={{ marginRight: 30 }}
+                                          name="angle-down" size={20} color="#001321">
+                                        </Icon>
+                                      </Right>
+
+                                    </View>
                                   </Separator>
                                 </CollapseHeader>
                                 <CollapseBody>
@@ -482,15 +599,16 @@ export default class ScreenOne extends Component {
                                           <ListItem >
                                             <View style={{ flexDirection: 'row' }}>
                                               <Icon style={{ marginLeft: 10 }}
-                                                name="asterisk" size={20} color="#001321">
+                                                name="trash" size={20} color="#001321" onPress={()=>this.deletarDispositivo()}>
                                               </Icon>
-                                              <Text style={{ marginHorizontal: 30 }}>{item.ip}
-                                              </Text>
-                                              <TextExtra item={item} />
-                                              <Icon style={{ marginLeft: 30 }}
-                                                name="plus-square-o" size={25} color="#001321"
-                                                onPress={() => alert(item.amb)}>
+                                              <Icon style={{ marginLeft: 10 }}
+                                                name="pencil" size={20} color="#001321">
                                               </Icon>
+                                              {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                              {/* </Text> */}
+                                              <EditableText style={{ marginHorizontal: 30 }} item={item} />
+                                              <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                              <EditablePlus item={item} ambientes={ambientes} />
                                             </View>
 
                                           </ListItem>
@@ -537,15 +655,32 @@ export default class ScreenOne extends Component {
           </View>
 
         ) : (
-            <Spinner
 
-              visible={this.state.spinner}
+            <View style={{
+              flex: 1,
+              backgroundColor: '#203864',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <View style={{ flex: 1, justifyContent: 'center', marginTop: 100 }}>
+                <Text style={{ color: '#fff', fontSize: 30 }}>Olá,</Text>
+                <Text style={{ color: '#fff', fontSize: 20 }}>Seja bem vindo(a)!
+                 </Text>
+              </View>
+              <View style={{ flex: 6, justifyContent: 'center' }}>
+                <Image source={require('../../img/logo2.png')} />
+              </View>
 
-              textContent={'Loading...'}
 
-              textStyle={{ color: '#FFF' }}
+              <View style={[styles.img, { marginBottom: 15 }]}>
+                <Image style={{ width: 110, height: 40 }}
+                  source={require('../../img/lumenx3.png')} />
+                <Text style={{ color: '#fff', fontSize: 16, marginBottom: 5 }}>www.lumenx.com.br</Text>
+                <Text style={{ color: '#fff', fontSize: 16, marginBottom: 30 }}>Tel: (35)3473-0235</Text>
+              </View>
 
-            />
+            </View>
+
           )}
       </View>
 
