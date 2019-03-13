@@ -51,7 +51,8 @@ export default class TestExtra extends Component {
     render() {
 
         return (
-            <View>
+            <View style = {{flexDirection: 'row'}}>
+                {/* <Text>..............</Text>  */}
                 <Text style={this.state.value == "ON" ? { color: 'green' } : { color: 'red' }} onPress={() => this.changeName()}>{this.state.value}</Text>
             </View>
 

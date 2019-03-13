@@ -54,6 +54,32 @@ function verifyEnvironment(deviceMac, deviceAmb) {
 }
 
 
+function deletarDispositivo(macDevice) {
+
+  Alert.alert(
+    'Informação',
+    'Deseja excluir o dispositivo?',
+    [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Errou'),
+        style: 'cancel',
+      },
+      { text: 'Sim', onPress: () => deletarDispositivoDoBanco(macDevice) },
+    ],
+    { cancelable: false },
+  );
+}
+
+function deletarDispositivoDoBanco(macDevice) {
+  var achou = false;
+
+  var dbDevice = new DeviceDAO()
+
+  dbDevice.deleteDevice(macDevice)
+
+}
+
 export default class ScreenOne extends Component {
 
   static environment = ''
@@ -84,7 +110,8 @@ export default class ScreenOne extends Component {
       devices: [],
       search: '',
       showIcons: false,
-      digitando: false
+      digitando: false,
+      iconePrincipal: 0
     };
 
     this.changeName = this.changeName.bind(this);
@@ -127,7 +154,7 @@ export default class ScreenOne extends Component {
 
       });
 
-      //this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
+      this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
 
       this.state.amb.sort(this.dynamicSort("name"))
 
@@ -233,7 +260,7 @@ export default class ScreenOne extends Component {
   verify() {
     this.startMulticast()
     this.searchAllDevices()
-    this.forceUpdate()
+
   }
 
   dynamicSort(property) {
@@ -283,6 +310,9 @@ export default class ScreenOne extends Component {
         }
 
         this.state.devices = temp;
+
+        this.forceUpdate()
+
 
       });
     })
@@ -360,44 +390,6 @@ export default class ScreenOne extends Component {
     this.forceUpdate()
   }
 
-  deletarDispositivoDoBanco(ambName)
-  {
-    var ambientes = this.props.ambientes;
-    var achou = false;
-
-    this.dbDevice = new DeviceDAO()
-
-    for(i=0; i<ambientes.length; i++)
-    {
-        if(ambName == ambientes[i].name)
-        {
-            achou = true;
-            this.dbDevice.updateAmbDevice(ambName, this.props.item.mac, this)
-            break;
-        }
-    }
-    
-    if(achou == false)
-        alert('Nome do ambiente inválido!')
-  }
-
-  deletarDispositivo(ambName) {
-
-    Alert.alert(
-      'Informação',
-      'Deseja mesmo deletar o ambiente?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Errou'),
-          style: 'cancel',
-        },
-        { text: 'Sim', onPress: () => this.deletarDispositivoDoBanco(ambName) },
-      ],
-      { cancelable: false },
-    );
-  }
-  
   atualizarAmbNoBD() {
     var ambientes = this.props.ambientes;
     var achou = false;
@@ -405,21 +397,31 @@ export default class ScreenOne extends Component {
     this.dbDevice = new DeviceDAO()
 
 
-    for(i=0; i<ambientes.length; i++)
-    {
-        console.log('Name = '+this.state.name+', Name2 = '+ambientes[i].name)
-        if(this.state.name == ambientes[i].name)
-        {
-            achou = true;
-            this.dbDevice.updateAmbDevice(this.state.name, this.props.item.mac, this)
-            break;
-        }
+    for (i = 0; i < ambientes.length; i++) {
+      console.log('Name = ' + this.state.name + ', Name2 = ' + ambientes[i].name)
+      if (this.state.name == ambientes[i].name) {
+        achou = true;
+        this.dbDevice.updateAmbDevice(this.state.name, this.props.item.mac, this)
+        break;
+      }
     }
-    
-    if(achou == false)
-        alert('Nome do ambiente inválido!')
-}
 
+    if (achou == false)
+      alert('Nome do ambiente inválido!')
+  }
+  MudarTela (numeroTela){
+
+    if (numeroTela == 1){
+      this.props.navigation.navigate('ScreenLampada');
+    }
+    else if (numeroTela == 2){
+      this.props.navigation.navigate('ScreenHome');
+    }
+    else {
+      this.props.navigation.navigate('ScreenHelp');
+    }
+
+  }
 
   render() {
 
@@ -464,197 +466,163 @@ export default class ScreenOne extends Component {
               {this.state.showIcons == true &&
                 <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                   <Left style={{ marginLeft: 60 }}>
-                    <Icon style={{ color: '#203864' }} size={50} name="lightbulb-o" />
+                    <Icon style={{ color: '#203864' }} size={50} name="lightbulb-o" onPress = {()=> this.MudarTela(1)} />
                   </Left>
-                  <Icon style={{ color: '#203864' }} size={50} name="home" />
+                  <Icon style={{ color: '#203864' }} size={50} name="home" onPress = {()=> this.MudarTela(2)} />
                   <Right style={{ marginRight: 60 }}>
-                    <Icon style={{ color: '#203864' }} size={50} name="question-circle-o" />
+                    <Icon style={{ color: '#203864' }} size={50} name="question-circle-o" onPress = {()=> this.MudarTela(3)}/>
+
                   </Right>
                 </View>
               }
 
-              {/*          <Picker
-                mode="dropdown"
-                style={{ marginTop: 15, color: 'fff', backgroundColor: '#fff', width: 170 }}
-                selectedValue={this.state.amb_name}
-                onValueChange={(itemValue, itemIndex) => { this.updatePicker(itemValue) }}
-              >
-                <Picker.item key='id' label='Todos' value='Todos' />
-                {this.state.amb.map((item) => {
-                  return (
-                    <Picker.Item key={item.id} label={item.name} value={item.name} />
-                  )
-                })
-
-                }
-              </Picker> */}
-
-
-
-
-
             </View>
 
-            <SearchBar
-              placeholder="Digite..."
-              lightTheme
-              round
-              onChangeText={this.updateSearch}
-              value={search}
-              autoCorrect={false}
-              onClear={() => this.ajudaSenhor()}
-            //onCancel={()=>alert('oiiiiii')}
-            />
+           
 
-            <View style={{ flex: 6, marginTop: 15 }}>
+              <SearchBar
+                placeholder="Digite..."
+                lightTheme
+                round
+                onChangeText={this.updateSearch}
+                value={search}
+                autoCorrect={false}
+                onClear={() => this.ajudaSenhor()}
+              />
 
-              <View style={{ backgroundColor: '#fff', height: 6 }} />
+              <View style={{ flex: 6, marginTop: 15 }}>
 
-              <ScrollView>
+                <View style={{ backgroundColor: '#fff', height: 6 }} />
 
-                {this.state.amb.map((amb) => {
+                <ScrollView>
 
-                  return (
+                  {this.state.amb.map((amb) => {
 
-                    <View >
-                      {this.state.digitando == false ? (
-                        <Collapse key={amb.name}>
-                          <CollapseHeader>
-                            <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
-                              <View style={{ flexDirection: 'row' }}>
+                    return (
 
-                                <Icon style={{ marginLeft: 15 }}
-                                  name="cog" size={20} color="#001321">
-                                </Icon>
-                                <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                      <View >
+                        {this.state.digitando == false ? (
+                          <Collapse key={amb.name}>
+                            <CollapseHeader>
+                              <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
+                                <View style={{ flexDirection: 'row' }}>
+
+                                  <Icon style={{ marginLeft: 15 }}
+                                    name="cog" size={20} color="#001321">
+                                  </Icon>
+                                  <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                                  {/*                                 
                                 <Right>
                                   <Icon style={{ marginRight: 30 }}
                                     name="angle-down" size={20} color="#001321">
                                   </Icon>
-                                </Right>
+                                </Right> */}
 
-                              </View>
-                            </Separator>
-                          </CollapseHeader>
-                          <CollapseBody>
-                            {this.state.devices.map(function (item) {
-                              return (
-                                <View>
-                                  {amb.name == item.amb ? (
-
-
-                                    <ListItem >
-                                      <View style={{ flexDirection: 'row' }}>
-                                        <Icon style={{ marginLeft: 10 }}
-                                          name="trash" size={30} color="#001321" onPress={() => this.deletarDispositivo()}>
-                                        </Icon>
-                                        <Icon style={{ marginLeft: 30 }}
-                                          name="pencil" size={30} color="#001321">
-                                        </Icon>
-                                        {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
-                                        {/* </Text> */}
-                                        <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                        <TextExtra style={{ marginHorizontal: 20 }} item={item} />
-                                        <EditablePlus item={item} ambientes={ambientes} />
-                                      </View>
-
-                                    </ListItem>
-                                  ) : null}
                                 </View>
-                              )
-                            })
-                            }
+                              </Separator>
+                            </CollapseHeader>
+                            <CollapseBody>
+                              {this.state.devices.map(function (item) {
+                                return (
+                                  <View>
+                                    {amb.name == item.amb ? (
 
-                          </CollapseBody>
 
-                        </Collapse>
-                      ) : (
-                          <View>
-                            {this.state.search == amb.name && (
-                              <Collapse key={amb.name}>
-                                <CollapseHeader>
-                                  <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
-                                    <View style={{ flexDirection: 'row' }}>
+                                      <ListItem >
+                                        <View style={{ flexDirection: 'row' }}>
+                                          <Icon style={{ marginLeft: 10 }}
+                                            name="trash" size={30} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                          </Icon>
+                                          {/*      <Icon style={{ marginLeft: 30 }}
+                                          name="pencil" size={30} color="#001321">
+                                        </Icon> */}
+                                          {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                          {/* </Text> */}
+                                          <EditableText style={{ marginHorizontal: 30 }} item={item} />
+                                          <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                          {/* <EditablePlus item={item} ambientes={ambientes} /> */}
+                                        </View>
 
-                                      <Icon style={{ marginLeft: 15 }}
-                                        name="cog" size={20} color="#001321">
-                                      </Icon>
-                                      <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
-                                      <Right>
+                                      </ListItem>
+                                    ) : null}
+                                  </View>
+                                )
+                              })
+                              }
+
+                            </CollapseBody>
+
+                          </Collapse>
+                        ) : (
+                            <View>
+                              {this.state.search == amb.name && (
+                                <Collapse key={amb.name}>
+                                  <CollapseHeader>
+                                    <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
+                                      <View style={{ flexDirection: 'row' }}>
+
+                                        <Icon style={{ marginLeft: 15 }}
+                                          name="cog" size={20} color="#001321">
+                                        </Icon>
+                                        <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                                        {/* <Right>
                                         <Icon style={{ marginRight: 30 }}
                                           name="angle-down" size={20} color="#001321">
                                         </Icon>
-                                      </Right>
+                                      </Right> */}
 
-                                    </View>
-                                  </Separator>
-                                </CollapseHeader>
-                                <CollapseBody>
-                                  {this.state.devices.map(function (item) {
-                                    return (
-                                      <View>
-                                        {amb.name == item.amb ? (
-
-
-                                          <ListItem >
-                                            <View style={{ flexDirection: 'row' }}>
-                                              <Icon style={{ marginLeft: 10 }}
-                                                name="trash" size={20} color="#001321" onPress={()=>this.deletarDispositivo()}>
-                                              </Icon>
-                                              <Icon style={{ marginLeft: 10 }}
-                                                name="pencil" size={20} color="#001321">
-                                              </Icon>
-                                              {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
-                                              {/* </Text> */}
-                                              <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                              <TextExtra style={{ marginHorizontal: 20 }} item={item} />
-                                              <EditablePlus item={item} ambientes={ambientes} />
-                                            </View>
-
-                                          </ListItem>
-                                        ) : null}
                                       </View>
-                                    )
-                                  })
-                                  }
-
-                                </CollapseBody>
-
-                              </Collapse>
-                            )}
-                          </View>)}
-
-                    </View>
-                  )
-                })}
-              </ScrollView>
+                                    </Separator>
+                                  </CollapseHeader>
+                                  <CollapseBody>
+                                    {this.state.devices.map(function (item) {
+                                      return (
+                                        <View>
+                                          {amb.name == item.amb ? (
 
 
+                                            <ListItem >
+                                              <View style={{ flexDirection: 'row' }}>
+                                                <Icon style={{ marginLeft: 10 }}
+                                                  name="trash" size={20} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                                </Icon>
+                                                {/*    <Icon style={{ marginLeft: 10 }}
+                                                name="pencil" size={20} color="#001321">
+                                              </Icon> */}
+                                                {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                                {/* </Text> */}
+                                                <EditableText style={{ marginHorizontal: 30 }} item={item} />
+                                                <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                                {/* <EditablePlus item={item} ambientes={ambientes} /> */}
+                                              </View>
 
+                                            </ListItem>
+                                          ) : null}
+                                        </View>
+                                      )
+                                    })
+                                    }
 
+                                  </CollapseBody>
 
+                                </Collapse>
+                              )}
+                            </View>)}
 
+                      </View>
+                    )
+                  })}
+                </ScrollView>
 
+              </View>
 
-
-
-
-
-
-
-
-
-
+              <View style={styles.img}>
+                <Image style={{ width: 110, height: 40 }}
+                  source={require('../../img/lumenx2.png')} />
+              </View>
             </View>
 
-
-            <View style={styles.img}>
-              <Image style={{ width: 110, height: 40 }}
-                source={require('../../img/lumenx2.png')} />
-            </View>
-          </View>
-
-        ) : (
+            ) : (
 
             <View style={{
               flex: 1,
@@ -681,14 +649,13 @@ export default class ScreenOne extends Component {
 
             </View>
 
-          )}
-      </View>
+            )
+     
+          }
+          </View>  
+            )
 
-
-    );
-
-  }
-
+}
 }
 
 const styles = StyleSheet.create({
@@ -702,13 +669,13 @@ const styles = StyleSheet.create({
   },
   btn: {
     height: 40,
-    // width: 350,
+    // width: 350
     marginTop: 0,
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: 5,
+    marginRight: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#5585ff',
+    backgroundColor: 'pink',
     paddingTop: 0,
     paddingBottom: 0,
     borderRadius: 10,

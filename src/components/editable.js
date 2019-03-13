@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 
 import DeviceDAO from '../models/database/device'
@@ -30,8 +30,8 @@ export default class EditableText extends React.Component {
 
     atualizarDeviceNoBD() {
         this.dbDevice = new DeviceDAO()
-        if (this.state.name.length >= 3){
-            this.dbDevice.updateNameDevice(this.state.name,this.props.item.mac,this)
+        if (this.state.name.length >= 3) {
+            this.dbDevice.updateNameDevice(this.state.name, this.props.item.mac, this)
         }
         else
             alert('Nome do dispositivo muito pequeno! Mínimo 3 caracteres.')
@@ -41,7 +41,7 @@ export default class EditableText extends React.Component {
 
         return (
 
-            <View marginHorizontal={30}>
+            <View marginHorizontal={15}>
 
                 <TouchableOpacity
 
@@ -55,44 +55,56 @@ export default class EditableText extends React.Component {
 
                     {
 
-                        this.state.edited ? <TextInput
+                        this.state.edited ? (
 
-                            style={{ fontSize: this.props.fontSize, color: this.props.color, width: this.props.width, textAlign: this.props.textAlign, borderBottomColor: this.props.borderBottomColor, borderBottomWidth: this.state.Validate.err ? this.props.borderBottomWidth : 0 }}
+                            <View style={{flexDirection:'row'}}>
+                                <Icon style={{ marginLeft: 15 }}
+                                    name="pencil" size={30} color="#001321">
+                                </Icon>
+                                <TextInput
 
-                            value={this.props.value}
+                                    style={{ fontSize: this.props.fontSize, color: this.props.color, width: this.props.width, textAlign: this.props.textAlign, borderBottomColor: this.props.borderBottomColor, borderBottomWidth: this.state.Validate.err ? this.props.borderBottomWidth : 0 }}
 
-                            onChangeText={(val) => {
+                                    value={this.props.value}
 
-                                this.setState({ name: val })
+                                    onChangeText={(val) => {
 
-                            }}
+                                        this.setState({ name: val })
 
-                            onSubmitEditing={() => this.atualizarDeviceNoBD()}
+                                    }}
 
-                            onBlur={() => {
+                                    onSubmitEditing={() => this.atualizarDeviceNoBD()}
 
-                                if (this.state.Validate.err) {
+                                    onBlur={() => {
 
-                                    return;
+                                        if (this.state.Validate.err) {
 
-                                }
+                                            return;
 
-                                this.setState({ edited: false })
+                                        }
 
-                            }}
+                                        this.setState({ edited: false })
 
-                            autoFocus={this.state.edited}
+                                    }}
 
-                            multiline={this.props.multiline}
-                            maxLength={40}
-                            width={150}
-                            numberOfLines={this.props.numberOfLines}
+                                    autoFocus={this.state.edited}
 
-                        /> : <Text
+                                    multiline={this.props.multiline}
+                                    maxLength={40}
+                                    width={150}
+                                    numberOfLines={this.props.numberOfLines}
 
-                            style={{ fontSize: this.props.fontSize, color: this.props.color, width: this.props.width, textAlign: this.props.textAlign }}
+                                />
+                            </View>
 
-                        >{this.props.item.name}</Text>
+                        ) : (
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Icon style={{ marginLeft: 15 }}
+                                        name="pencil" size={30} color="#001321">
+                                    </Icon>
+                                    <Text style={{ marginLeft: 15 }}>{this.props.item.name}</Text>
+                                </View>
+                            )
 
                     }
 

@@ -159,4 +159,32 @@ export default class DeviceDAO extends Component {
 
     }
 
+    deleteDevice = (macDevice) => {
+
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'DELETE from device where mac = ?',
+                [macDevice],
+                (tx, results) => {
+                
+                    if (results.rowsAffected > 0) {
+                        Alert.alert(
+                            'Informação',
+                            'Dispositivo deletado com sucesso!',
+                            [
+                                {
+                                    text: 'Ok',
+                                    onPress: () => console.log('Ambiente do device atualizado com sucesso!'),
+                                },
+                            ],
+                            { cancelable: false }
+                        );
+                    } else {
+                        alert('Erro ao deletar o dispositivo!');
+                    }
+                }
+            );
+        });
+
+    }
 }

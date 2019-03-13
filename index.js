@@ -18,3 +18,5 @@ export default class app1 extends Component {
 
 AppRegistry.registerComponent('smartlight', () => app1);
 
+
+
