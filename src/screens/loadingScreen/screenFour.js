@@ -11,6 +11,7 @@ export default class ScreenFour extends Component {
 
     }
 
+   // this.props.navigation.navigate('NomeDaTela')
     render() {
         const { navigate } = this.props.navigation;
         setTimeout(function () {

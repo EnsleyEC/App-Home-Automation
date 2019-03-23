@@ -39,7 +39,6 @@ export default class TestExtra extends Component {
         axios.get(`http://${this.state.ip}/deviceValue?value=${value}`)
             .then(() => {
                 console.log('Chegou a resposta.')
-
             })
             .catch(() => { console.log('Error'); })
 

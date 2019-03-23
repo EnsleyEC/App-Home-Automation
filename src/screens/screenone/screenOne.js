@@ -109,7 +109,7 @@ export default class ScreenOne extends Component {
       amb_name: '',
       devices: [],
       search: '',
-      showIcons: false,
+      showIcons: true,
       digitando: false,
       iconePrincipal: 0
     };
@@ -359,7 +359,7 @@ export default class ScreenOne extends Component {
       for (j = 0; j < this.state.devices.length; j++) {
         if (this.state.deviceDataList[i].name == this.state.devices[j].mac) {
           this.state.devices[j].ip = this.state.deviceDataList[i].ipdevice;
-
+          this.state.devices[j].value = this.state.deviceDataList[i].value;
           break;
         }
       }
