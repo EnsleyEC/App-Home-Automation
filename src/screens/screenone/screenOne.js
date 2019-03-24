@@ -457,9 +457,6 @@ export default class ScreenOne extends Component {
                 <IconTwo style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
               </Right>
 
-
-
-
             </Container>
 
             <View>
@@ -533,6 +530,7 @@ export default class ScreenOne extends Component {
                                           <Icon style={{ marginLeft: 10 }}
                                             name="trash" size={30} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
                                           </Icon>
+                                          
                                           {/*      <Icon style={{ marginLeft: 30 }}
                                           name="pencil" size={30} color="#001321">
                                         </Icon> */}

@@ -25,7 +25,7 @@ export default class EnvironmentDAO extends Component {
                     if (res.rows.length == 0) {
                         txn.executeSql('DROP TABLE IF EXISTS environment', []);
                         txn.executeSql(
-                            'CREATE TABLE IF NOT EXISTS environment(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(25))',
+                            'CREATE TABLE IF NOT EXISTS environment(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(25) unique)',
                             []
                         );
 
@@ -117,7 +117,7 @@ export default class EnvironmentDAO extends Component {
 
     }
 
-    update_environment = (envi_new_name, envi_old_name, nav) => {
+    update_environment = (envi_new_name, envi_old_name) => {
 
         db.transaction(function (tx) {
             tx.executeSql(
@@ -128,11 +128,11 @@ export default class EnvironmentDAO extends Component {
                     if (results.rowsAffected > 0) {
                         Alert.alert(
                             'Informação',
-                            'Nome do ambiente atualizado com sucesso!',
+                            'Nome do ambiente atualizado com sucesso! Atualize a tela.',
                             [
                                 {
                                     text: 'Ok',
-                                    onPress: () => nav.navigation.goback(),
+                                    onPress: () => console.log('Nome do ambiente atualizado com sucesso!'),
                                 },
                             ],
                             { cancelable: false }
@@ -145,6 +145,8 @@ export default class EnvironmentDAO extends Component {
         });
 
     }
+
+    
 
     deleteAllEnvironments = () => {
 
