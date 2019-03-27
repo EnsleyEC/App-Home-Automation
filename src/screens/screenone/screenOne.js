@@ -154,7 +154,7 @@ export default class ScreenOne extends Component {
 
       });
 
-      this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
+      this.state.amb.push({ id: 0, name: 'Novos dispositivos' })
 
       this.state.amb.sort(this.dynamicSort("name"))
 
@@ -504,9 +504,9 @@ export default class ScreenOne extends Component {
                               <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
                                 <View style={{ flexDirection: 'row' }}>
 
-                                  <Icon style={{ marginLeft: 15 }}
+                                  {/* <Icon style={{ marginLeft: 15 }}
                                     name="cog" size={20} color="#001321">
-                                  </Icon>
+                                  </Icon> */}
                                   <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
                                   {/*                                 
                                 <Right>
@@ -525,10 +525,10 @@ export default class ScreenOne extends Component {
                                     {amb.name == item.amb ? (
 
 
-                                      <ListItem >
+                                      <ListItem style={{ marginLeft: 10}}>
                                         <View style={{ flexDirection: 'row' }}>
-                                          <Icon style={{ marginLeft: 10 }}
-                                            name="trash" size={30} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                          <Icon
+                                            name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
                                           </Icon>
                                           
                                           {/*      <Icon style={{ marginLeft: 30 }}
@@ -579,10 +579,10 @@ export default class ScreenOne extends Component {
                                           {amb.name == item.amb ? (
 
 
-                                            <ListItem >
+                                            <ListItem style={{ marginLeft: 10 }}>
                                               <View style={{ flexDirection: 'row' }}>
                                                 <Icon style={{ marginLeft: 10 }}
-                                                  name="trash" size={20} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                                  name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
                                                 </Icon>
                                                 {/*    <Icon style={{ marginLeft: 10 }}
                                                 name="pencil" size={20} color="#001321">

@@ -136,32 +136,35 @@ export default class ScreenLampada extends Component {
                         backgroundColor: '#002540', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 30
                     }}>
 
+                    <Left/>
+
                         <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
                             source={require('../../img/logo.png')} />
 
                         <Right>
-                            <Icon size={30} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
+                            <Icon size={22} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
                         </Right>
                     </Container>
 
 
                 </View>
 
-                <View style={{ flex: 6, backgroundColor: 'white' }}>
+                <View style={{ flex: 6, backgroundColor: 'white',  alignItems: 'center' }}>
 
+                    <Left style={{ marginLeft: 10 }}>
+                        <Icon style={{ color: '#203864' }} size={100} name="lightbulb-o" />
+                    </Left>
                     <View style={{ flex: 3, flexDirection: 'row' }}>
 
-                        <Left style={{ marginLeft: 20 }}>
-                            <Icon style={{ color: '#203864' }} size={100} name="lightbulb-o" />
-                        </Left>
 
-                        <Text style={{ fontSize: 20 }}>ADD Interruptor</Text>
+
+                        <Text style={{ fontSize: 25, marginLeft: 120, fontWeight: 'bold', color: '#203864', marginTop: 80 }}>Interruptor</Text>
 
                         <Right />
 
                     </View>
 
-                    <View style={{ flex: 6, backgroundColor: 'pink' }}>
+                    <View style={{ flex: 6, backgroundColor: 'white' }}>
 
                         <ScrollView >
 
@@ -174,9 +177,9 @@ export default class ScreenLampada extends Component {
 
                                             <CollapseHeader>
 
-                                                <Separator style={{ width: screenWidth, alignItems: 'center' }} bordered >
+                                                <Separator style={{ width: screenWidth, alignItems: 'center', fontWeight: 'bold', color: '#203864' }} bordered >
 
-                                                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{device.name}</Text>
+                                                    <Text style={{ fontSize: 20, fontWeight: 'bold', fontWeight: 'bold', color: '#203864' }}>{device.name}</Text>
 
                                                 </Separator>
 
@@ -185,19 +188,25 @@ export default class ScreenLampada extends Component {
                                                 {this.state.amb.map((amb) => {
 
                                                     return (
-                                                        <View style={{ alignItems: 'center' }}>
+                                                        <View style={{  }}>
                                                             {amb.name != device.amb ? (
-                                                                <View>
-                                                                    <ListItem >
-                                                                        <View style={{ flexDirection: 'row' }}>
-                                                                            <Text style={{ marginRight: 30 }}>{amb.name}</Text>
-                                                                            <TouchableHighlight
+                                                                <View style={{justifyContent:'center'}}>
+                                                                    <Right><TouchableHighlight
                                                                                 style={{ backgroundColor: 'white' }}
                                                                                 onPress={() => this.mudarAmbiente(amb, device)}>
-                                                                                <Text>Ok</Text>
-                                                                            </TouchableHighlight>
+                                                                                <Text style={{fontWeight: 'bold', color: 'black', }}>Ok</Text>
+                                                                              
+                                                                            </TouchableHighlight></Right>
+                                                                    <ListItem >
+                                                                        <View style={{ flexDirection: 'row' }}>
+                                                                      
+                                                                            <Text style={{ marginRight: 30 }}>{amb.name}
+                                                                            </Text>
+                                                                           
                                                                         </View>
+                                                                        
                                                                     </ListItem>
+                                                                    
                                                                 </View>
                                                             ) : null}
                                                         </View>

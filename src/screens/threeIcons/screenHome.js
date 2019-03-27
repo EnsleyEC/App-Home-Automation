@@ -152,12 +152,12 @@ export default class ScreenHome extends Component {
                     <Container style={{
                         backgroundColor: '#002540', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 30
                     }}>
-
+                       <Left/>
                         <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
                             source={require('../../img/logo.png')} />
 
                         <Right>
-                            <Icon size={30} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
+                            <Icon size={22} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
                         </Right>
                     </Container>
 
@@ -168,15 +168,17 @@ export default class ScreenHome extends Component {
 
                     <View style={{ flex: 3, flexDirection: 'row' }}>
 
-                        <Left style={{ marginLeft: 20 }}>
+                        <View style={{marginLeft:100, backgroundColor: 'white'}}>
+                        <Left style={{ marginLeft: 10 }}>
                             <Icon style={{ color: '#203864' }} size={100} name="home" />
                         </Left>
-                        <View style={{ backgroundColor: 'yellow', marginLeft: 15 }}>
-                            <Text style={{ marginTop: 20 }}>Nome do ambiente</Text>
-                            <View style={{ backgroundColor: 'pink', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                <TextInput
+                            <Text style={{ fontSize :20,color: '#203864',fontWeight:'bold'}}>Nome do ambiente</Text>
+                            <View style={{ backgroundColor: 'white', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                
+                        
+                                <TextInput  style={{color: 'black' }}
                                     placeholder="Digite o nome..."
-                                    style={{ backgroundColor: 'white' }}
+                                    style={{ backgroundColor: 'white',color: '#203864' }}
                                     maxLength={20}
                                     width={150}
                                     onChangeText={(typedText) => this.setState({ ambName: typedText })}
@@ -184,16 +186,16 @@ export default class ScreenHome extends Component {
                                 <TouchableHighlight
                                     style={{ backgroundColor: 'white' }}
                                     onPress={() => this.register_environment(this.state.ambName)}>
-                                    <Text>Ok</Text>
+                                    <Text style = {{fontWeight:'bold', color: '#203864'}}>Ok</Text>
                                 </TouchableHighlight>
                             </View>
                         </View>
-
+                    
                         <Right />
 
                     </View>
 
-                    <View style={{ flex: 6, backgroundColor: 'pink' }}>
+                    <View style={{ flex: 6, backgroundColor: 'white' }}>
 
                         <ScrollView >
 
@@ -202,9 +204,9 @@ export default class ScreenHome extends Component {
 
                                 <CollapseHeader>
 
-                                    <Separator style={{ width: screenWidth, alignItems: 'center' }} bordered >
+                                    <Separator style={{ width: screenWidth, alignItems: 'center',color: '#203864' }} bordered >
 
-                                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Ambientes</Text>
+                                        <Text style={{ fontSize: 20, fontWeight: 'bold' ,color: '#203864'}}>Ambientes</Text>
 
                                     </Separator>
 
@@ -212,13 +214,13 @@ export default class ScreenHome extends Component {
                                 <CollapseBody>
                                     {this.state.amb.map((amb) => {
                                         return (
-                                            <View style={{ alignItems: 'center' }}>
-                                                <ListItem >
+                                            <View style={{ marginLeft: 15}}>
+                                                <ListItem style={{ marginLeft: 10 }}>
                                                     <View style={{ flexDirection: 'row' }}>
-                                                        <Icon style={{ marginLeft: 10 }}
-                                                            name="trash" size={30} color="#001321" onPress={() => this.delete_environment(amb.name)}>
+                                                        <Icon 
+                                                            name="trash" size={22} color="#203864" onPress={() => this.delete_environment(amb.name)}>
                                                         </Icon>
-                                                        <EditableText style={{ marginHorizontal: 30 }} amb={amb} />
+                                                        <EditableText style={{ marginHorizontal: 30,color:'#203864'  }} amb={amb} />
 
                                                     </View>
                                                 </ListItem>
