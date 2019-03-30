@@ -6,7 +6,8 @@ import {
   Image,
   Alert,
   ScrollView,
-  Picker
+  Picker,
+  Dimensions
 } from 'react-native';
 import dgram from 'dgram';
 import axios from 'axios';
@@ -29,6 +30,13 @@ import { openDatabase } from 'react-native-sqlite-storage';
 import EditableText from '../../components/editable';
 import EditablePlus from '../../components/editablePlus'
 import { SearchBar } from 'react-native-elements';
+import SwitchExtra from '../../components/switchExtra'
+
+
+let { width } = Dimensions.get("window");
+let { height } = Dimensions.get("window");
+const screenWidth = width;
+const screenHeight = height;
 
 var db;
 var table_envi;
@@ -257,41 +265,56 @@ export default class ScreenOne extends Component {
     return unique_array
   }
 
-  verify() {
+  verify(mostrarMensagem) {
     this.startMulticast()
     this.searchAllDevices()
-    this.viewAllEnvironmentTwo()
+    this.viewAllEnvironmentTwo(mostrarMensagem)
+
   }
 
-  viewAllEnvironmentTwo = () => {
+  viewAllEnvironmentTwo = (mostrarMensagem) => {
     var temp = []
 
-    db.close()
+    //if (db != undefined)
+    //  db.close()
     db = openDatabase({ name: 'lumenx.db' });
 
     db.transaction(tx => {
-        tx.executeSql('SELECT * FROM environment', [], (tx, results) => {
+      tx.executeSql('SELECT * FROM environment order by name', [], (tx, results) => {
 
-            for (let i = 0; i < results.rows.length; ++i) {
-                temp.push(results.rows.item(i));
+        for (let i = 0; i < results.rows.length; ++i) {
+          temp.push(results.rows.item(i));
 
-            }
+        }
 
-     
-            this.state.amb = temp;
-            
-            this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
-            this.state.amb.sort(this.dynamicSort("name"))
-           
-            this.forceUpdate()
 
-        });
+        this.state.amb = temp;
 
-        
+        this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
+        this.state.amb.sort(this.dynamicSort("name"))
+
+        this.forceUpdate()
+
+        if (mostrarMensagem == true) {
+          Alert.alert(
+            'Informação',
+            'Tela atualizada!',
+            [
+              {
+                text: 'Ok',
+                onPress: () => console.log('Nothing'),
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+      });
+
+
 
     })
 
-}
+  }
 
   dynamicSort(property) {
     var sortOrder = 1;
@@ -404,6 +427,7 @@ export default class ScreenOne extends Component {
     else {
       this.setState({ showIcons: false })
     }
+    this.viewAllEnvironmentTwo()
   }
 
 
@@ -442,13 +466,14 @@ export default class ScreenOne extends Component {
   MudarTela(numeroTela) {
 
     if (numeroTela == 1) {
-      this.props.navigation.navigate('ScreenLampada');
+      this.props.navigation.navigate('ScreenLampada', { screenOne: this });
     }
     else if (numeroTela == 2) {
-      this.props.navigation.navigate('ScreenHome');
+      this.props.navigation.navigate('ScreenHome', { screenOne: this });
+
     }
     else {
-      this.props.navigation.navigate('ScreenHelp');
+      this.props.navigation.navigate('ScreenHelp', { screenOne: this });
     }
 
   }
@@ -484,7 +509,7 @@ export default class ScreenOne extends Component {
                 source={require('../../img/logo.png')} />
 
               <Right>
-                <IconTwo style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
+                <Icon size={22} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify(true)} />
               </Right>
 
             </Container>
@@ -561,18 +586,23 @@ export default class ScreenOne extends Component {
 
 
                                     <ListItem style={{ marginLeft: 10 }}>
-                                      <View style={{ flexDirection: 'row' }}>
-                                        <Icon
-                                          name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
-                                        </Icon>
+                                      <View style={{ width: screenWidth, flexDirection: 'row' }}>
+                                        <Left style={{ marginLeft: 15 }}>
+                                          <Icon
+                                            name="trash" size={27} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                          </Icon>
 
-                                        {/*      <Icon style={{ marginLeft: 30 }}
+                                          {/*      <Icon style={{ marginLeft: 30 }}
                                           name="pencil" size={30} color="#001321">
                                         </Icon> */}
-                                        {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
-                                        {/* </Text> */}
-                                        <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                        <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                          {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                          {/* </Text> */}
+                                          <EditableText style={{ marginHorizontal: 30 }} item={item} />
+                                        </Left>
+                                        <Right style={{ marginRight: 30 }}>
+                                          {/* <TextExtra item={item} /> */}
+                                          <SwitchExtra item={item} />
+                                        </Right>
                                         {/* <EditablePlus item={item} ambientes={ambientes} /> */}
                                       </View>
 
@@ -588,7 +618,7 @@ export default class ScreenOne extends Component {
                         </Collapse>
                       ) : (
                           <View>
-                            {this.state.search == amb.name && (
+                            {amb.name.indexOf(this.state.search) != -1 && (
                               <Collapse key={amb.name}>
                                 <CollapseHeader>
                                   <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
@@ -617,7 +647,7 @@ export default class ScreenOne extends Component {
                                           <ListItem style={{ marginLeft: 10 }}>
                                             <View style={{ flexDirection: 'row' }}>
                                               <Icon style={{ marginLeft: 10 }}
-                                                name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                                name="trash" size={27} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
                                               </Icon>
                                               {/*    <Icon style={{ marginLeft: 10 }}
                                                 name="pencil" size={20} color="#001321">
@@ -625,7 +655,10 @@ export default class ScreenOne extends Component {
                                               {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
                                               {/* </Text> */}
                                               <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                              <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                              <Right>
+                                                {/* <TextExtra style={{ marginHorizontal: 20 }} item={item} /> */}
+                                                <SwitchExtra item={item} />
+                                              </Right>
                                               {/* <EditablePlus item={item} ambientes={ambientes} /> */}
                                             </View>
 

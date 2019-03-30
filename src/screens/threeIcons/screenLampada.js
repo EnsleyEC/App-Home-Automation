@@ -6,7 +6,7 @@ import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react
 import { Right, Left, Content, ListItem, Separator } from 'native-base';
 import { openDatabase } from 'react-native-sqlite-storage';
 import EditableText from '../../components/editableDev'
-
+import HeaderExtra from '../../components/header'
 var db;
 
 let { width } = Dimensions.get("window");
@@ -15,7 +15,9 @@ const screenWidth = width;
 const screenHeight = height;
 
 export default class ScreenLampada extends Component {
-
+    static navigationOptions = ({ navigation, screenProps }) => ({
+        headerLeft: <HeaderExtra nav={navigation} />
+    });
     constructor(props) {
         super(props);
 
@@ -27,11 +29,15 @@ export default class ScreenLampada extends Component {
         // abrindo o bd
         db = openDatabase({ name: 'lumenx.db' });
         // buscando os ambientes
-        this.viewAllDevices()
+        this.viewAllDevices(false)
         this.viewAllEnvironment()
     }
 
-    viewAllDevices = () => {
+    componentDidMount() {
+        this.props.navigation.setParams({ obj: this });
+    }
+
+    viewAllDevices = (chamadoPeloRefresh) => {
 
         db.transaction(tx => {
             tx.executeSql('SELECT * FROM device', [], (tx, results) => {
@@ -46,6 +52,23 @@ export default class ScreenLampada extends Component {
 
                 this.forceUpdate()
 
+                if (chamadoPeloRefresh == true) {
+
+                    Alert.alert(
+                        'Informação',
+                        'Tela atualizada!',
+                        [
+                            {
+                                text: 'Ok',
+                                onPress: () => console.log('Nothing'),
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+
+
+                }
+
             });
         })
 
@@ -57,7 +80,7 @@ export default class ScreenLampada extends Component {
         var temp = []
 
         db.transaction(tx => {
-            tx.executeSql('SELECT * FROM environment', [], (tx, results) => {
+            tx.executeSql('SELECT * FROM environment order by name', [], (tx, results) => {
 
                 for (let i = 0; i < results.rows.length; ++i) {
                     temp.push(results.rows.item(i));
@@ -124,32 +147,16 @@ export default class ScreenLampada extends Component {
 
     verify() {
 
-        this.viewAllDevices()
+        this.viewAllDevices(true)
 
     }
 
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ flex: 1 }}>
-                    <Container style={{
-                        backgroundColor: '#002540', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 30
-                    }}>
-
-                    <Left/>
-
-                        <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
-                            source={require('../../img/logo.png')} />
-
-                        <Right>
-                            <Icon size={22} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
-                        </Right>
-                    </Container>
 
 
-                </View>
-
-                <View style={{ flex: 6, backgroundColor: 'white',  alignItems: 'center' }}>
+                <View style={{ flex: 6, backgroundColor: 'white', alignItems: 'center' }}>
 
                     <Left style={{ marginLeft: 10 }}>
                         <Icon style={{ color: '#203864' }} size={100} name="lightbulb-o" />
@@ -188,25 +195,30 @@ export default class ScreenLampada extends Component {
                                                 {this.state.amb.map((amb) => {
 
                                                     return (
-                                                        <View style={{  }}>
+                                                        <View style={{}}>
                                                             {amb.name != device.amb ? (
-                                                                <View style={{justifyContent:'center'}}>
-                                                                    <Right><TouchableHighlight
-                                                                                style={{ backgroundColor: 'white' }}
-                                                                                onPress={() => this.mudarAmbiente(amb, device)}>
-                                                                                <Text style={{fontWeight: 'bold', color: 'black', }}>Ok</Text>
-                                                                              
-                                                                            </TouchableHighlight></Right>
+                                                                <View style={{ justifyContent: 'center' }}>
+
                                                                     <ListItem >
+
                                                                         <View style={{ flexDirection: 'row' }}>
-                                                                      
-                                                                            <Text style={{ marginRight: 30 }}>{amb.name}
-                                                                            </Text>
-                                                                           
+                                                                            <Left>
+                                                                                <TouchableHighlight
+                                                                                    onPress={() => this.mudarAmbiente(amb, device)}>
+                                                                                    <Icon size={27} name="check-square" />
+
+                                                                                </TouchableHighlight>
+                                                                                <Text style={{ marginLeft: 20, fontSize:18 }}>{amb.name}
+                                                                                </Text>
+
+                                                                            </Left>
+
+
                                                                         </View>
-                                                                        
+
                                                                     </ListItem>
-                                                                    
+
+
                                                                 </View>
                                                             ) : null}
                                                         </View>

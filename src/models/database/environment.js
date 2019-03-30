@@ -72,7 +72,7 @@ export default class EnvironmentDAO extends Component {
         var temp = []
 
         db.transaction(tx => {
-            tx.executeSql('SELECT * FROM environment', [], (tx, results) => {
+            tx.executeSql('SELECT * FROM environment order by name', [], (tx, results) => {
 
                 for (let i = 0; i < results.rows.length; ++i) {
                     temp.push(results.rows.item(i));

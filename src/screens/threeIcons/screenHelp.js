@@ -1,31 +1,39 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Dimensions, Image, StyleSheet } from 'react-native';
 import { Text as TextBase, Icon as IconTwo, Container } from 'native-base'
 import { Right, Left } from 'native-base';
+import HeaderExtra from '../../components/header'
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+let { width } = Dimensions.get("window");
+let { height } = Dimensions.get("window");
+const screenWidth = width;
+const screenHeight = height;
 
 export default class ScreenHelp extends Component {
+    static navigationOptions = ({ navigation, screenProps }) => ({
+        headerLeft: <View style={{ width: screenWidth }}>
+        <Container style={{
+            backgroundColor: '#002540', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: screenHeight / 8
+        }}>
+            <Left >
+                <Icon size={22} style={{ marginLeft: 15, color: 'white' }} name={'arrow-left'}
+                    onPress={() => { navigation.goBack()}} />
+            </Left>
+            <Image style={{ width: 80, height: 30 }}
+                source={require('../../img/logo.png')} />
 
+            <Right/>
+        </Container>
+    </View>
+    });
     constructor(props) {
         super(props);
-
-
-
     }
 
     render() {
         return (
             <View style={{ flex: 1 }}>
-
-                <View style={{ flex: 1 }}>
-                    <Container style={{
-                        backgroundColor: '#002540', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 30
-                    }}>
-
-                        <Image style={{ width: 80, height: 30,marginHorizontal: 100 }}
-                            source={require('../../img/logo-tok.png')} />
-
-                    </Container>
-                </View>
 
                 <View style={{ flex: 6, backgroundColor: 'white' }}>
                     <ScrollView style={{marginLeft:15,marginRight:5}}>

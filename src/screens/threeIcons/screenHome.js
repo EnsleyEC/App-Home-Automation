@@ -7,7 +7,9 @@ import { Right, Left, Content, ListItem, Separator } from 'native-base';
 import { openDatabase } from 'react-native-sqlite-storage';
 import EditableText from '../../components/editableAmb'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import HeaderExtra from '../../components/header'
 var db;
+var navi;
 
 let { width } = Dimensions.get("window");
 let { height } = Dimensions.get("window");
@@ -15,7 +17,9 @@ const screenWidth = width;
 const screenHeight = height;
 
 export default class ScreenHome extends Component {
-
+    static navigationOptions = ({ navigation, screenProps }) => ({
+        headerLeft: <HeaderExtra nav={navigation} />
+    });
     constructor(props) {
         super(props);
 
@@ -23,18 +27,24 @@ export default class ScreenHome extends Component {
             amb: [],
             ambName: ''
         }
+        navi = this;
         // abrindo o bd
         db = openDatabase({ name: 'lumenx.db' });
         // buscando os ambientes
-        this.viewAllEnvironment()
+        this.viewAllEnvironment(false)
 
     }
 
-    viewAllEnvironment = () => {
+    componentDidMount() {
+        this.props.navigation.setParams({ obj: this });
+    }
+
+
+    viewAllEnvironment = (chamadoPeloRefresh) => {
         var temp = []
 
         db.transaction(tx => {
-            tx.executeSql('SELECT * FROM environment', [], (tx, results) => {
+            tx.executeSql('SELECT * FROM environment order by name', [], (tx, results) => {
 
                 for (let i = 0; i < results.rows.length; ++i) {
                     temp.push(results.rows.item(i));
@@ -43,7 +53,19 @@ export default class ScreenHome extends Component {
 
                 this.state.amb = temp;
                 this.forceUpdate()
-
+                if (chamadoPeloRefresh == true) {
+                    Alert.alert(
+                        'Informação',
+                        'Tela atualizada!',
+                        [
+                            {
+                                text: 'Ok',
+                                onPress: () => console.log('Nothing'),
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                }
             });
 
         })
@@ -199,15 +221,16 @@ export default class ScreenHome extends Component {
         );
 
     }
+
+
     verify() {
 
-        this.viewAllEnvironment()
-        
-
+        this.viewAllEnvironment(true)
 
     }
 
     render() {
+
         return (
 
             <View style={{ flex: 1 }}>
@@ -222,35 +245,20 @@ export default class ScreenHome extends Component {
                     scrollEnabled={false}
 
                 >
-                    <View style={{ flex: 2 }}>
-                        <Container style={{
-                            backgroundColor: '#002540', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: screenHeight/8
-                        }}>
-                            <Left />
-                            <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
-                                source={require('../../img/logo.png')} />
-
-                            <Right>
-                                <Icon size={22} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify()} />
-                            </Right>
-                        </Container>
-
-
-                    </View>
 
                     <View style={{ flex: 5, backgroundColor: 'white' }}>
 
                         <View style={{ flex: 3, flexDirection: 'row' }}>
 
-                            <View style={{ alignItems: 'center', marginLeft: 100, backgroundColor: 'white' }}>
+                            <View style={{ alignItems: 'center', marginLeft: 90, backgroundColor: 'white' }}>
 
                                 <Icon style={{ color: '#203864' }} size={100} name="home" />
 
-                                <Text style={{ marginTop: 5, fontSize: 20, color: '#203864', fontWeight: 'bold' }}>Nome do ambiente</Text>
+                                <Text style={{ marginTop: 5, fontSize: 21, color: '#203864', fontWeight: 'bold' }}>Nome do ambiente</Text>
                                 <View style={{ backgroundColor: 'white', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     <TextInput style={{ color: 'black' }}
                                         placeholder="Digite o nome..."
-                                        style={{ backgroundColor: 'white', color: '#203864' }}
+                                        style={{ backgroundColor: 'white', fontSize: 18, color: '#203864' }}
                                         maxLength={20}
                                         width={150}
                                         onChangeText={(typedText) => this.setState({ ambName: typedText })}
@@ -258,8 +266,8 @@ export default class ScreenHome extends Component {
                                     <TouchableHighlight
                                         style={{ backgroundColor: 'white' }}
                                         onPress={() => this.controlRegister(this.state.ambName)}>
-                                        <Icon size={22} name="check-square" onPress={() => console.log('oi')} />
-                                       {/*  <Text style={{ fontWeight: 'bold', color: '#203864' }}>Ok</Text> */}
+                                        <Icon size={27} name="check-square" />
+                                        {/*  <Text style={{ fontWeight: 'bold', color: '#203864' }}>Ok</Text> */}
                                     </TouchableHighlight>
                                 </View>
                             </View>
@@ -288,7 +296,7 @@ export default class ScreenHome extends Component {
                                                     <ListItem style={{ marginLeft: 10 }}>
                                                         <View style={{ flexDirection: 'row' }}>
                                                             <Icon
-                                                                name="trash" size={22} color="#203864" onPress={() => this.controlDelete(amb.name)}>
+                                                                name="trash" size={27} color="#203864" onPress={() => this.controlDelete(amb.name)}>
                                                             </Icon>
                                                             <EditableText style={{ marginHorizontal: 30, color: '#203864' }} amb={amb} />
 
