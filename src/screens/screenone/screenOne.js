@@ -117,7 +117,7 @@ export default class ScreenOne extends Component {
       amb_name: '',
       devices: [],
       search: '',
-      showIcons: true,
+      showIcons: false,
       digitando: false,
       iconePrincipal: 0
     };
@@ -522,7 +522,7 @@ export default class ScreenOne extends Component {
                   </Left>
                   <Icon style={{ color: '#203864' }} size={50} name="home" onPress={() => this.MudarTela(2)} />
                   <Right style={{ marginRight: 60 }}>
-                    <Icon style={{ color: '#203864' }} size={50} name="question-circle-o" onPress={() => this.MudarTela(3)} />
+                    <Icon style={{ color: '#203864' }} size={38} name="group" onPress={() => this.MudarTela(3)} />
 
                   </Right>
                 </View>
@@ -548,9 +548,7 @@ export default class ScreenOne extends Component {
             />
 
             <View style={{ flex: 6, marginTop: 15 }}>
-
-              <View style={{ backgroundColor: '#fff', height: 6 }} />
-
+            
               <ScrollView>
 
                 {this.state.amb.map((amb) => {
@@ -561,13 +559,13 @@ export default class ScreenOne extends Component {
                       {this.state.digitando == false ? (
                         <Collapse key={amb.name}>
                           <CollapseHeader>
-                            <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
+                            <Separator style={{ height: 50,backgroundColor:'white'}} bordered >
                               <View style={{ flexDirection: 'row' }}>
 
                                 {/* <Icon style={{ marginLeft: 15 }}
                                     name="cog" size={20} color="#001321">
                                   </Icon> */}
-                                <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                                <Text style={{ marginLeft: 15, color: amb.name == "*Novos dispositivos*" ? 'gray':'#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name.split("*")}</Text>
                                 {/*                                 
                                 <Right>
                                   <Icon style={{ marginRight: 30 }}
@@ -589,8 +587,9 @@ export default class ScreenOne extends Component {
                                       <View style={{ width: screenWidth, flexDirection: 'row' }}>
                                         <Left style={{ marginLeft: 15 }}>
                                           <Icon
-                                            name="trash" size={27} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                            name="trash" size={25} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
                                           </Icon>
+
 
                                           {/*      <Icon style={{ marginLeft: 30 }}
                                           name="pencil" size={30} color="#001321">
@@ -623,17 +622,7 @@ export default class ScreenOne extends Component {
                                 <CollapseHeader>
                                   <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
                                     <View style={{ flexDirection: 'row' }}>
-
-                                      <Icon style={{ marginLeft: 15 }}
-                                        name="cog" size={20} color="#001321">
-                                      </Icon>
                                       <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
-                                      {/* <Right>
-                                        <Icon style={{ marginRight: 30 }}
-                                          name="angle-down" size={20} color="#001321">
-                                        </Icon>
-                                      </Right> */}
-
                                     </View>
                                   </Separator>
                                 </CollapseHeader>
@@ -645,18 +634,21 @@ export default class ScreenOne extends Component {
 
 
                                           <ListItem style={{ marginLeft: 10 }}>
-                                            <View style={{ flexDirection: 'row' }}>
-                                              <Icon style={{ marginLeft: 10 }}
-                                                name="trash" size={27} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
-                                              </Icon>
-                                              {/*    <Icon style={{ marginLeft: 10 }}
-                                                name="pencil" size={20} color="#001321">
-                                              </Icon> */}
-                                              {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
-                                              {/* </Text> */}
-                                              <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                              <Right>
-                                                {/* <TextExtra style={{ marginHorizontal: 20 }} item={item} /> */}
+                                            <View style={{ width: screenWidth, flexDirection: 'row' }}>
+                                              <Left style={{ marginLeft: 15 }}>
+                                                <Icon
+                                                  name="trash" size={25} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                                </Icon>
+
+                                                {/*      <Icon style={{ marginLeft: 30 }}
+    name="pencil" size={30} color="#001321">
+  </Icon> */}
+                                                {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                                {/* </Text> */}
+                                                <EditableText style={{ marginHorizontal: 30 }} item={item} />
+                                              </Left>
+                                              <Right style={{ marginRight: 30 }}>
+                                                {/* <TextExtra item={item} /> */}
                                                 <SwitchExtra item={item} />
                                               </Right>
                                               {/* <EditablePlus item={item} ambientes={ambientes} /> */}

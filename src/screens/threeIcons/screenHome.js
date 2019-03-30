@@ -250,17 +250,17 @@ export default class ScreenHome extends Component {
 
                         <View style={{ flex: 3, flexDirection: 'row' }}>
 
-                            <View style={{ alignItems: 'center', marginLeft: 90, backgroundColor: 'white' }}>
+                            <View style={{ alignItems: 'center', backgroundColor: 'white' }}>
 
                                 <Icon style={{ color: '#203864' }} size={100} name="home" />
 
-                                <Text style={{ marginTop: 5, fontSize: 21, color: '#203864', fontWeight: 'bold' }}>Nome do ambiente</Text>
-                                <View style={{ backgroundColor: 'white', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                {/* <Text style={{ marginTop: 5, fontSize: 21, color: '#203864', fontWeight: 'bold' }}>Nome do ambiente</Text> */}
+                                <View style={{ width: screenWidth,backgroundColor: 'white', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     <TextInput style={{ color: 'black' }}
-                                        placeholder="Digite o nome..."
-                                        style={{ backgroundColor: 'white', fontSize: 18, color: '#203864' }}
+                                        placeholder="Digite o nome do novo ambiente:"
+                                        style={{ backgroundColor: 'white', fontSize: 17, color: '#203864' }}
                                         maxLength={20}
-                                        width={150}
+                                        width={screenWidth*0.8}
                                         onChangeText={(typedText) => this.setState({ ambName: typedText })}
                                     />
                                     <TouchableHighlight
@@ -273,7 +273,7 @@ export default class ScreenHome extends Component {
                             </View>
                         </View>
 
-                        <View style={{ flex: 2, backgroundColor: 'white' }}>
+                        <View style={{ marginTop:15,flex: 2, backgroundColor: 'white' }}>
 
                             <ScrollView >
 
@@ -282,7 +282,7 @@ export default class ScreenHome extends Component {
 
                                     <CollapseHeader>
 
-                                        <Separator style={{ width: screenWidth, alignItems: 'center', color: '#203864' }} bordered >
+                                        <Separator style={{ backgroundColor:'white', width: screenWidth, alignItems: 'center', color: '#203864' }} bordered >
 
                                             <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#203864' }}>Ambientes</Text>
 
@@ -296,7 +296,7 @@ export default class ScreenHome extends Component {
                                                     <ListItem style={{ marginLeft: 10 }}>
                                                         <View style={{ flexDirection: 'row' }}>
                                                             <Icon
-                                                                name="trash" size={27} color="#203864" onPress={() => this.controlDelete(amb.name)}>
+                                                                name="trash" size={25} color="#203864" onPress={() => this.controlDelete(amb.name)}>
                                                             </Icon>
                                                             <EditableText style={{ marginHorizontal: 30, color: '#203864' }} amb={amb} />
 

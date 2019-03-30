@@ -58,13 +58,13 @@ export default class EditableText extends React.Component {
                         this.state.edited ? (
 
                             <View style={{flexDirection:'row',justifyContent:'center'}}>
-                                <Icon style={{ marginLeft: 5, marginRight:8}}
+            {/*                     <Icon style={{ marginLeft: 5, marginRight:8}}
 
-                                    name="pencil" size={27} color='#001321'>
-                                </Icon>
+                                    name="pencil" size={20} color='#001321'>
+                                </Icon> */}
                                 <TextInput
 
-                                    style={{ fontSize:18, color: this.props.color,borderBottomWidth: this.state.Validate.err ? this.props.borderBottomWidth : 0 }}
+                                    style={{ fontSize:20, color: this.props.color,borderBottomWidth: this.state.Validate.err ? this.props.borderBottomWidth : 0 }}
 
                                     value={this.props.value}
 
@@ -100,10 +100,10 @@ export default class EditableText extends React.Component {
 
                         ) : (
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Icon style={{ marginLeft: 5 }}
-                                        name="pencil" size={27} color="#001321">
-                                    </Icon>
-                                    <Text style={{ marginLeft: 15, fontSize:18 }}>{this.props.item.name}</Text>
+                                   {/*  <Icon style={{ marginLeft: 5 }}
+                                        name="pencil" size={20} color="#001321">
+                                    </Icon> */}
+                                    <Text style={{ marginLeft: 15, fontSize:20 }}>{this.props.item.name}</Text>
                                 </View>
                             )
 

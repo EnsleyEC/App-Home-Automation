@@ -158,14 +158,14 @@ export default class ScreenLampada extends Component {
 
                 <View style={{ flex: 6, backgroundColor: 'white', alignItems: 'center' }}>
 
-                    <Left style={{ marginLeft: 10 }}>
-                        <Icon style={{ color: '#203864' }} size={100} name="lightbulb-o" />
+                    <Left style={{ marginTop: 15 }}>
+                        <Icon style={{ color: '#203864' }} size={90} name="lightbulb-o" />
                     </Left>
-                    <View style={{ flex: 3, flexDirection: 'row' }}>
+                    <View style={{ flex: 1.5, flexDirection: 'row' }}>
 
+                        <Left />
 
-
-                        <Text style={{ fontSize: 25, marginLeft: 120, fontWeight: 'bold', color: '#203864', marginTop: 80 }}>Interruptor</Text>
+                        <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#203864', marginTop: 35 }}>Dispositivos</Text>
 
                         <Right />
 
@@ -184,9 +184,9 @@ export default class ScreenLampada extends Component {
 
                                             <CollapseHeader>
 
-                                                <Separator style={{ width: screenWidth, alignItems: 'center', fontWeight: 'bold', color: '#203864' }} bordered >
+                                                <Separator style={{ width: screenWidth, alignItems: 'center', fontWeight: 'bold', backgroundColor: 'white' }} bordered >
 
-                                                    <Text style={{ fontSize: 20, fontWeight: 'bold', fontWeight: 'bold', color: '#203864' }}>{device.name}</Text>
+                                                    <Text style={{ fontSize: 20, fontWeight: 'bold', fontWeight: 'bold', color: 'gray' }}>{device.name}</Text>
 
                                                 </Separator>
 
@@ -195,7 +195,7 @@ export default class ScreenLampada extends Component {
                                                 {this.state.amb.map((amb) => {
 
                                                     return (
-                                                        <View style={{}}>
+                                                        <View style={{width:screenWidth}}>
                                                             {amb.name != device.amb ? (
                                                                 <View style={{ justifyContent: 'center' }}>
 
@@ -203,15 +203,18 @@ export default class ScreenLampada extends Component {
 
                                                                         <View style={{ flexDirection: 'row' }}>
                                                                             <Left>
-                                                                                <TouchableHighlight
-                                                                                    onPress={() => this.mudarAmbiente(amb, device)}>
-                                                                                    <Icon size={27} name="check-square" />
 
-                                                                                </TouchableHighlight>
-                                                                                <Text style={{ marginLeft: 20, fontSize:18 }}>{amb.name}
+                                                                                <Text style={{ color: '#203864',marginLeft: 20, fontSize: 18 }}>{amb.name}
                                                                                 </Text>
 
                                                                             </Left>
+
+                                                                            <Right style={{marginRight:20}}>
+                                                                                <TouchableHighlight
+                                                                                    onPress={() => this.mudarAmbiente(amb, device)}>
+                                                                                    <Icon size={27} name="check-square"  />
+                                                                                </TouchableHighlight>
+                                                                            </Right>
 
 
                                                                         </View>

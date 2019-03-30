@@ -129,7 +129,7 @@ export default class ScreenThree extends Component {
                         </Icon>
 
                         <Icon style={{ marginLeft: 10 }}
-                            name="trash" size={27} color="#001321" onPress={() => this._confirmDeleteMessage(this.state.nameAmb)}>
+                            name="trash" size={25} color="#001321" onPress={() => this._confirmDeleteMessage(this.state.nameAmb)}>
                         </Icon>
                     </View>
 
