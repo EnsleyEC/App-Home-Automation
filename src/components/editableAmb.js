@@ -102,7 +102,7 @@ export default class EditableText extends React.Component {
                                     <Icon style={{ marginLeft: 5, marginRight: 30 }}
                                         name="pencil" size={22} color="#001321">
                                     </Icon>
-                                    <Text style={{ marginLeft: 15, fontSize: 20 }}>{this.props.amb.name}</Text>
+                                    <Text style={{ marginLeft: 15, fontSize: 15 }}>{this.props.amb.name}</Text>
                                 </View>
                             )
 

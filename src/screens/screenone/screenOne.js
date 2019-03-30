@@ -154,7 +154,7 @@ export default class ScreenOne extends Component {
 
       });
 
-      this.state.amb.push({ id: 0, name: 'Novos dispositivos' })
+      this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
 
       this.state.amb.sort(this.dynamicSort("name"))
 
@@ -260,8 +260,38 @@ export default class ScreenOne extends Component {
   verify() {
     this.startMulticast()
     this.searchAllDevices()
-
+    this.viewAllEnvironmentTwo()
   }
+
+  viewAllEnvironmentTwo = () => {
+    var temp = []
+
+    db.close()
+    db = openDatabase({ name: 'lumenx.db' });
+
+    db.transaction(tx => {
+        tx.executeSql('SELECT * FROM environment', [], (tx, results) => {
+
+            for (let i = 0; i < results.rows.length; ++i) {
+                temp.push(results.rows.item(i));
+
+            }
+
+     
+            this.state.amb = temp;
+            
+            this.state.amb.push({ id: 0, name: '*Novos dispositivos*' })
+            this.state.amb.sort(this.dynamicSort("name"))
+           
+            this.forceUpdate()
+
+        });
+
+        
+
+    })
+
+}
 
   dynamicSort(property) {
     var sortOrder = 1;
@@ -409,12 +439,12 @@ export default class ScreenOne extends Component {
     if (achou == false)
       alert('Nome do ambiente inválido!')
   }
-  MudarTela (numeroTela){
+  MudarTela(numeroTela) {
 
-    if (numeroTela == 1){
+    if (numeroTela == 1) {
       this.props.navigation.navigate('ScreenLampada');
     }
-    else if (numeroTela == 2){
+    else if (numeroTela == 2) {
       this.props.navigation.navigate('ScreenHome');
     }
     else {
@@ -463,11 +493,11 @@ export default class ScreenOne extends Component {
               {this.state.showIcons == true &&
                 <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                   <Left style={{ marginLeft: 60 }}>
-                    <Icon style={{ color: '#203864' }} size={50} name="lightbulb-o" onPress = {()=> this.MudarTela(1)} />
+                    <Icon style={{ color: '#203864' }} size={50} name="lightbulb-o" onPress={() => this.MudarTela(1)} />
                   </Left>
-                  <Icon style={{ color: '#203864' }} size={50} name="home" onPress = {()=> this.MudarTela(2)} />
+                  <Icon style={{ color: '#203864' }} size={50} name="home" onPress={() => this.MudarTela(2)} />
                   <Right style={{ marginRight: 60 }}>
-                    <Icon style={{ color: '#203864' }} size={50} name="question-circle-o" onPress = {()=> this.MudarTela(3)}/>
+                    <Icon style={{ color: '#203864' }} size={50} name="question-circle-o" onPress={() => this.MudarTela(3)} />
 
                   </Right>
                 </View>
@@ -475,152 +505,157 @@ export default class ScreenOne extends Component {
 
             </View>
 
-           
 
-              <SearchBar
-                placeholder="Digite..."
-                lightTheme
-                round
-                onChangeText={this.updateSearch}
-                value={search}
-                autoCorrect={false}
-                onClear={() => this.ajudaSenhor()}
-              />
 
-              <View style={{ flex: 6, marginTop: 15 }}>
+            <SearchBar
+              placeholder="Digite..."
+              underlineColorAndroid="#203864"
+              placeholderTextColor="#203864"
+              lightTheme
+              //platform={'android'}
+              onChangeText={this.updateSearch}
+              value={search}
+              inputContainerStyle={{ backgroundColor: 'white' }}
+              containerStyle={{ backgroundColor: '#203864' }}
+              inputStyle={{ backgroundColor: 'white' }}
+              autoCorrect={false}
+              onClear={() => this.ajudaSenhor()}
+            />
 
-                <View style={{ backgroundColor: '#fff', height: 6 }} />
+            <View style={{ flex: 6, marginTop: 15 }}>
 
-                <ScrollView>
+              <View style={{ backgroundColor: '#fff', height: 6 }} />
 
-                  {this.state.amb.map((amb) => {
+              <ScrollView>
 
-                    return (
+                {this.state.amb.map((amb) => {
 
-                      <View >
-                        {this.state.digitando == false ? (
-                          <Collapse key={amb.name}>
-                            <CollapseHeader>
-                              <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
-                                <View style={{ flexDirection: 'row' }}>
+                  return (
 
-                                  {/* <Icon style={{ marginLeft: 15 }}
+                    <View >
+                      {this.state.digitando == false ? (
+                        <Collapse key={amb.name}>
+                          <CollapseHeader>
+                            <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
+                              <View style={{ flexDirection: 'row' }}>
+
+                                {/* <Icon style={{ marginLeft: 15 }}
                                     name="cog" size={20} color="#001321">
                                   </Icon> */}
-                                  <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
-                                  {/*                                 
+                                <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                                {/*                                 
                                 <Right>
                                   <Icon style={{ marginRight: 30 }}
                                     name="angle-down" size={20} color="#001321">
                                   </Icon>
                                 </Right> */}
 
-                                </View>
-                              </Separator>
-                            </CollapseHeader>
-                            <CollapseBody>
-                              {this.state.devices.map(function (item) {
-                                return (
-                                  <View>
-                                    {amb.name == item.amb ? (
+                              </View>
+                            </Separator>
+                          </CollapseHeader>
+                          <CollapseBody>
+                            {this.state.devices.map(function (item) {
+                              return (
+                                <View>
+                                  {amb.name == item.amb ? (
 
 
-                                      <ListItem style={{ marginLeft: 10}}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                          <Icon
-                                            name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
-                                          </Icon>
-                                          
-                                          {/*      <Icon style={{ marginLeft: 30 }}
+                                    <ListItem style={{ marginLeft: 10 }}>
+                                      <View style={{ flexDirection: 'row' }}>
+                                        <Icon
+                                          name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                        </Icon>
+
+                                        {/*      <Icon style={{ marginLeft: 30 }}
                                           name="pencil" size={30} color="#001321">
                                         </Icon> */}
-                                          {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
-                                          {/* </Text> */}
-                                          <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                          <TextExtra style={{ marginHorizontal: 20 }} item={item} />
-                                          {/* <EditablePlus item={item} ambientes={ambientes} /> */}
-                                        </View>
+                                        {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                        {/* </Text> */}
+                                        <EditableText style={{ marginHorizontal: 30 }} item={item} />
+                                        <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                        {/* <EditablePlus item={item} ambientes={ambientes} /> */}
+                                      </View>
 
-                                      </ListItem>
-                                    ) : null}
-                                  </View>
-                                )
-                              })
-                              }
+                                    </ListItem>
+                                  ) : null}
+                                </View>
+                              )
+                            })
+                            }
 
-                            </CollapseBody>
+                          </CollapseBody>
 
-                          </Collapse>
-                        ) : (
-                            <View>
-                              {this.state.search == amb.name && (
-                                <Collapse key={amb.name}>
-                                  <CollapseHeader>
-                                    <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
-                                      <View style={{ flexDirection: 'row' }}>
+                        </Collapse>
+                      ) : (
+                          <View>
+                            {this.state.search == amb.name && (
+                              <Collapse key={amb.name}>
+                                <CollapseHeader>
+                                  <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
+                                    <View style={{ flexDirection: 'row' }}>
 
-                                        <Icon style={{ marginLeft: 15 }}
-                                          name="cog" size={20} color="#001321">
-                                        </Icon>
-                                        <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
-                                        {/* <Right>
+                                      <Icon style={{ marginLeft: 15 }}
+                                        name="cog" size={20} color="#001321">
+                                      </Icon>
+                                      <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                                      {/* <Right>
                                         <Icon style={{ marginRight: 30 }}
                                           name="angle-down" size={20} color="#001321">
                                         </Icon>
                                       </Right> */}
 
-                                      </View>
-                                    </Separator>
-                                  </CollapseHeader>
-                                  <CollapseBody>
-                                    {this.state.devices.map(function (item) {
-                                      return (
-                                        <View>
-                                          {amb.name == item.amb ? (
+                                    </View>
+                                  </Separator>
+                                </CollapseHeader>
+                                <CollapseBody>
+                                  {this.state.devices.map(function (item) {
+                                    return (
+                                      <View>
+                                        {amb.name == item.amb ? (
 
 
-                                            <ListItem style={{ marginLeft: 10 }}>
-                                              <View style={{ flexDirection: 'row' }}>
-                                                <Icon style={{ marginLeft: 10 }}
-                                                  name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
-                                                </Icon>
-                                                {/*    <Icon style={{ marginLeft: 10 }}
+                                          <ListItem style={{ marginLeft: 10 }}>
+                                            <View style={{ flexDirection: 'row' }}>
+                                              <Icon style={{ marginLeft: 10 }}
+                                                name="trash" size={22} color="#001321" onPress={() => deletarDispositivo(item.mac)}>
+                                              </Icon>
+                                              {/*    <Icon style={{ marginLeft: 10 }}
                                                 name="pencil" size={20} color="#001321">
                                               </Icon> */}
-                                                {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
-                                                {/* </Text> */}
-                                                <EditableText style={{ marginHorizontal: 30 }} item={item} />
-                                                <TextExtra style={{ marginHorizontal: 20 }} item={item} />
-                                                {/* <EditablePlus item={item} ambientes={ambientes} /> */}
-                                              </View>
+                                              {/* // <Text style={{ marginHorizontal: 30 }}>{item.ip} */}
+                                              {/* </Text> */}
+                                              <EditableText style={{ marginHorizontal: 30 }} item={item} />
+                                              <TextExtra style={{ marginHorizontal: 20 }} item={item} />
+                                              {/* <EditablePlus item={item} ambientes={ambientes} /> */}
+                                            </View>
 
-                                            </ListItem>
-                                          ) : null}
-                                        </View>
-                                      )
-                                    })
-                                    }
+                                          </ListItem>
+                                        ) : null}
+                                      </View>
+                                    )
+                                  })
+                                  }
 
-                                  </CollapseBody>
+                                </CollapseBody>
 
-                                </Collapse>
-                              )}
-                            </View>)}
+                              </Collapse>
+                            )}
+                          </View>)}
 
-                      </View>
-                    )
-                  })}
-                </ScrollView>
+                    </View>
+                  )
+                })}
+              </ScrollView>
 
-              </View>
-
-              <View style={styles.img}>
-                <Image style={{ width: 110, height: 40 }}
-                  source={require('../../img/lumenx2.png')} />
-              </View>
             </View>
 
-            ) : (
+            <View style={styles.img}>
+              <Image style={{ width: 110, height: 40 }}
+                source={require('../../img/lumenx2.png')} />
+            </View>
+          </View>
+
+        ) : (
 
             <View style={{
               flex: 1,
@@ -647,13 +682,13 @@ export default class ScreenOne extends Component {
 
             </View>
 
-            )
-     
-          }
-          </View>  
-            )
+          )
 
-}
+        }
+      </View>
+    )
+
+  }
 }
 
 const styles = StyleSheet.create({
