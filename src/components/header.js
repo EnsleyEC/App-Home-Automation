@@ -34,8 +34,8 @@ export default class HeaderExtra extends Component {
                         <Icon size={22} style={{ marginLeft: 15, color: 'white' }} name={'arrow-left'}
                             onPress={() => { this.controlBack(this.props.nav.state.params.screenOne)}} />
                     </Left>
-                    <Image style={{ width: 80, height: 30 }}
-                        source={require('../img/logo.png')} />
+              {/*       <Image style={{ width: 80, height: 30 }}
+                        source={require('../img/logo.png')} /> */}
 
                     <Right>
                         <Icon size={22} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.props.nav.state.params.obj.verify()} />

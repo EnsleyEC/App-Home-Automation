@@ -20,8 +20,8 @@ export default class ScreenHelp extends Component {
                     <Icon size={22} style={{ marginLeft: 15, color: 'white' }} name={'arrow-left'}
                         onPress={() => { navigation.goBack() }} />
                 </Left>
-                <Image style={{ width: 80, height: 30 }}
-                    source={require('../../img/logo.png')} />
+              {/*   <Image style={{ width: 80, height: 30 }}
+                    source={require('../../img/logo.png')} /> */}
 
                 <Right />
             </Container>

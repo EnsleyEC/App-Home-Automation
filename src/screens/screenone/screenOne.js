@@ -505,8 +505,8 @@ export default class ScreenOne extends Component {
                 <IconTwo style={{ marginLeft: 15, color: 'white' }} name="menu" onPress={() => this.esconde()} />
               </Left>
 
-              <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
-                source={require('../../img/logo.png')} />
+             {/*  <Image style={{ width: 80, height: 30, marginHorizontal: 100 }}
+                source={require('../../img/logo.png')} /> */}
 
               <Right>
                 <Icon size={22} style={{ marginRight: 15, color: 'white' }} name="refresh" onPress={() => this.verify(true)} />
@@ -622,7 +622,7 @@ export default class ScreenOne extends Component {
                                 <CollapseHeader>
                                   <Separator style={{ height: 50, backgroundColor: 'white' }} bordered >
                                     <View style={{ flexDirection: 'row' }}>
-                                      <Text style={{ marginLeft: 15, color: '#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name}</Text>
+                                    <Text style={{ marginLeft: 15, color: amb.name == "*Novos dispositivos*" ? 'gray':'#203864', fontSize: 20, fontWeight: 'bold' }}>{amb.name.split("*")}</Text>
                                     </View>
                                   </Separator>
                                 </CollapseHeader>

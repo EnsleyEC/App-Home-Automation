@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "smartlight.app"
-               BlueprintName = "smartlight"
-               ReferencedContainer = "container:smartlight.xcodeproj">
+               BuildableName = "LumenxApp.app"
+               BlueprintName = "LumenxApp"
+               ReferencedContainer = "container:LumenxApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "smartlightTests.xctest"
-               BlueprintName = "smartlightTests"
-               ReferencedContainer = "container:smartlight.xcodeproj">
+               BuildableName = "LumenxAppTests.xctest"
+               BlueprintName = "LumenxAppTests"
+               ReferencedContainer = "container:LumenxApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "smartlightTests.xctest"
-               BlueprintName = "smartlightTests"
-               ReferencedContainer = "container:smartlight.xcodeproj">
+               BuildableName = "LumenxAppTests.xctest"
+               BlueprintName = "LumenxAppTests"
+               ReferencedContainer = "container:LumenxApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "smartlight.app"
-            BlueprintName = "smartlight"
-            ReferencedContainer = "container:smartlight.xcodeproj">
+            BuildableName = "LumenxApp.app"
+            BlueprintName = "LumenxApp"
+            ReferencedContainer = "container:LumenxApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "smartlight.app"
-            BlueprintName = "smartlight"
-            ReferencedContainer = "container:smartlight.xcodeproj">
+            BuildableName = "LumenxApp.app"
+            BlueprintName = "LumenxApp"
+            ReferencedContainer = "container:LumenxApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "smartlight.app"
-            BlueprintName = "smartlight"
-            ReferencedContainer = "container:smartlight.xcodeproj">
+            BuildableName = "LumenxApp.app"
+            BlueprintName = "LumenxApp"
+            ReferencedContainer = "container:LumenxApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

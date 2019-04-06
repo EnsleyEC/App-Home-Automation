@@ -2,8 +2,9 @@
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        jcenter()
+        
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.4'
@@ -15,6 +16,7 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         mavenLocal()
         jcenter()
         maven {
@@ -23,6 +25,10 @@ allprojects {
         }
     }
 }
+
+/* task clean(type: Delete) {
+    delete rootProject.buildDir
+} */
 
 subprojects { 
       if (project.name.contains('react-native-vector-icons')) { 

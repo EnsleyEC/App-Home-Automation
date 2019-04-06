@@ -1,4 +1,4 @@
-package com.smartlight;
+package com.LumenxApp;
 
 import android.app.Application;
 

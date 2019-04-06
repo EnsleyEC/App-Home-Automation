@@ -17,7 +17,7 @@ export default class app1 extends Component {
   }
 }
 
-AppRegistry.registerComponent('smartlight', () => app1);
+AppRegistry.registerComponent('LumenxApp', () => app1);
 
 
 

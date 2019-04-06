@@ -14,11 +14,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Test to React Native!"
 
-@interface smartlightTests : XCTestCase
+@interface LumenxAppTests : XCTestCase
 
 @end
 
-@implementation smartlightTests
+@implementation LumenxAppTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

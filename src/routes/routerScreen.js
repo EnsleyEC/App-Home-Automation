@@ -11,13 +11,14 @@ import ScreenFour from '../screens/loadingScreen/screenFour';
 import ScreenHelp from '../screens/threeIcons/screenHelp';
 import ScreenLampada from '../screens/threeIcons/screenLampada';
 import ScreenHome from '../screens/threeIcons/screenHome';
+import ScreenContract from '../screens/screenContract'
 
 const App = createStackNavigator(
 
-    {ScreenOne,ScreenTwo,ScreenThree,ScreenFour,ScreenHelp,ScreenHome,ScreenLampada}
+    {ScreenOne,ScreenTwo,ScreenThree,ScreenFour,ScreenContract,ScreenHelp,ScreenHome,ScreenLampada}
     ,
     {
-        initialRouteName: 'ScreenOne',
+        initialRouteName: 'ScreenContract',
     }
 );
 
